@@ -4,28 +4,99 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .main {
+        display: flex;
+        justify-content: center;
+      }
+
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
   </head>
   <body>
-    <canvas id="canvas" width="800" height="2000"></canvas>
+    <div class="main">
+      <button id="test" onclick="onClickTestButton();">스탑</button>
+      <canvas id="canvas" width="295" height="745"></canvas>
+    </div>
     <script>
       const canvas = document.getElementById("canvas");
 
       const ctx = canvas.getContext("2d");
-      ctx.fillStyle = "gray";
 
-      const borderWidth = 10;
-      const blockSize = 50;
-      const topMargin = 400;
+      const borderWidth = 5;
+      const blockSize = 25;
+      const widthBlockCount = 10;
+      const heightBlockCount = 25;
+      const topMargin = 0;
 
-      for (x = 0; x < 12; x++) {
-        for (y = 0; y < 24; y++) {
-          ctx.fillRect(
-            borderWidth * x + blockSize * x,
-            borderWidth * y + blockSize * y + topMargin,
-            blockSize,
-            blockSize
-          );
+      let stackedBlocks = new Array(widthBlockCount);
+      let controlBlock = new Array(widthBlockCount);
+
+      initBlockArray(stackedBlocks);
+      initBlockArray(controlBlock);
+
+      controlBlock[5][0] = true;
+
+      drawBlocks();
+
+      function initBlockArray(blockArray) {
+        for (let x = 0; x < widthBlockCount; x++) {
+          blockArray[x] = new Array(heightBlockCount);
         }
+
+        for (let x = 0; x < widthBlockCount; x++) {
+          for (let y = 0; y < heightBlockCount; y++) {
+            blockArray[x][y] = false;
+          }
+        }
+      }
+
+      function drawBlocks() {
+        for (let x = 0; x < widthBlockCount; x++) {
+          for (let y = 0; y < heightBlockCount; y++) {
+            if (stackedBlocks[x][y]) {
+              ctx.fillStyle = "black";
+            } else {
+              ctx.fillStyle = "gray";
+            }
+
+            if (controlBlock[x][y]) {
+              ctx.fillStyle = "blue";
+            }
+
+            ctx.fillRect(
+              borderWidth * x + blockSize * x,
+              borderWidth * y + blockSize * y + topMargin,
+              blockSize,
+              blockSize
+            );
+          }
+        }
+      }
+
+      let testButtonOn = false;
+      let timeId = null;
+
+      function onClickTestButton() {
+        if (testButtonOn) {
+          clearInterval(timeId);
+        } else {
+          timeId = setInterval(flowGravity, 300);
+        }
+        testButtonOn = !testButtonOn;
+      }
+
+      function flowGravity() {
+        for (let x = 0; x < widthBlockCount; x++) {
+          for (let y = heightBlockCount - 1; y != 0; y--) {
+            controlBlock[x][y] = controlBlock[x][y - 1];
+          }
+          controlBlock[x][0] = false;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBlocks();
       }
     </script>
   </body>
