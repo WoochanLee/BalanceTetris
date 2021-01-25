@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="800" height="2000"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "gray";
+
+      const borderWidth = 10;
+      const blockSize = 50;
+      const topMargin = 400;
+
+      for (x = 0; x < 12; x++) {
+        for (y = 0; y < 24; y++) {
+          ctx.fillRect(
+            borderWidth * x + blockSize * x,
+            borderWidth * y + blockSize * y + topMargin,
+            blockSize,
+            blockSize
+          );
+        }
+      }
+    </script>
+  </body>
+</html>
