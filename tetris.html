@@ -25,6 +25,8 @@
 
       const ctx = canvas.getContext("2d");
 
+      const timePerLine = 100;
+
       const borderWidth = 5;
       const blockSize = 25;
       const widthBlockCount = 10;
@@ -32,12 +34,15 @@
       const topMargin = 0;
 
       let stackedBlocks = new Array(widthBlockCount);
-      let controlBlock = new Array(widthBlockCount);
+      let controlBlocks = new Array(widthBlockCount);
 
       initBlockArray(stackedBlocks);
-      initBlockArray(controlBlock);
+      initBlockArray(controlBlocks);
 
-      controlBlock[5][0] = true;
+      controlBlocks[6][0] = true;
+      controlBlocks[5][0] = true;
+      controlBlocks[4][0] = true;
+      controlBlocks[5][1] = true;
 
       drawBlocks();
 
@@ -46,6 +51,10 @@
           blockArray[x] = new Array(heightBlockCount);
         }
 
+        clearBlockArray(blockArray);
+      }
+
+      function clearBlockArray(blockArray) {
         for (let x = 0; x < widthBlockCount; x++) {
           for (let y = 0; y < heightBlockCount; y++) {
             blockArray[x][y] = false;
@@ -62,7 +71,7 @@
               ctx.fillStyle = "gray";
             }
 
-            if (controlBlock[x][y]) {
+            if (controlBlocks[x][y]) {
               ctx.fillStyle = "blue";
             }
 
@@ -83,20 +92,185 @@
         if (testButtonOn) {
           clearInterval(timeId);
         } else {
-          timeId = setInterval(flowGravity, 300);
+          timeId = setInterval(flowGravity, timePerLine);
         }
         testButtonOn = !testButtonOn;
       }
 
       function flowGravity() {
-        for (let x = 0; x < widthBlockCount; x++) {
-          for (let y = heightBlockCount - 1; y != 0; y--) {
-            controlBlock[x][y] = controlBlock[x][y - 1];
-          }
-          controlBlock[x][0] = false;
+        let collisionCheckTmpArray = copyBlockArray(controlBlocks);
+        if (isCollided(collisionCheckTmpArray, stackedBlocks)) {
+          addBlocksToStackedArray(controlBlocks, stackedBlocks);
+          addNewControlBlock(controlBlocks);
+        } else {
+          controlBlocks = collisionCheckTmpArray;
         }
+
+        // for (let x = 0; x < widthBlockCount; x++) {
+        //   for (let y = heightBlockCount - 1; y != 0; y--) {
+        //     controlBlocks[x][y] = controlBlocks[x][y - 1];
+        //   }
+        //   controlBlocks[x][0] = false;
+        // }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawBlocks();
+      }
+
+      function copyBlockArray(blockArray) {
+        let tmpArray = new Array(widthBlockCount);
+        for (let x = 0; x < widthBlockCount; x++) {
+          tmpArray[x] = blockArray[x].slice();
+        }
+        return tmpArray;
+      }
+
+      function isCollided(collisionCheckTmpArray, stackedBlocks) {
+        if (isReachToBottom(collisionCheckTmpArray)) {
+          return true;
+        }
+
+        moveToBottomOneLine(collisionCheckTmpArray);
+
+        for (let x = 0; x < widthBlockCount; x++) {
+          for (let y = heightBlockCount - 1; y != 0; y--) {
+            if (collisionCheckTmpArray[x][y] && stackedBlocks[x][y]) {
+              return true;
+            }
+          }
+        }
+
+        return false;
+      }
+
+      function isReachToBottom(blockArray) {
+        for (let x = 0; x < widthBlockCount; x++) {
+          if (blockArray[x][heightBlockCount - 1]) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function moveToBottomOneLine(blockArray) {
+        for (let x = 0; x < widthBlockCount; x++) {
+          for (let y = heightBlockCount - 1; y != 0; y--) {
+            blockArray[x][y] = blockArray[x][y - 1];
+          }
+          blockArray[x][0] = false;
+        }
+      }
+
+      function addBlocksToStackedArray(controlBlocks, stackedBlocks) {
+        for (let x = 0; x < widthBlockCount; x++) {
+          for (let y = heightBlockCount - 1; y != 0; y--) {
+            if (controlBlocks[x][y]) {
+              stackedBlocks[x][y] = true;
+            }
+          }
+        }
+      }
+
+      function addNewControlBlock(controlBlocks) {
+        //initBlockArray(controlBlocks);
+        clearBlockArray(controlBlocks);
+        let type = Math.floor(Math.random() * 6 + 1);
+
+        switch (type) {
+          case 1:
+            addTypeOneBlock();
+            break;
+          case 2:
+            addTypeTwoBlock();
+            break;
+          case 3:
+            addTypeThreeBlock();
+            break;
+          case 4:
+            addTypeFourBlock();
+            break;
+          case 5:
+            addTypeFiveBlock();
+            break;
+          case 6:
+            addTypeSixBlock();
+            break;
+        }
+      }
+
+      /**
+       ****□□□□****
+       **/
+      function addTypeOneBlock() {
+        controlBlocks[4][0] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[6][0] = true;
+        controlBlocks[7][0] = true;
+      }
+
+      /**
+       ****□□□*****
+       *****□******
+       **/
+      function addTypeTwoBlock() {
+        controlBlocks[4][0] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[5][1] = true;
+        controlBlocks[6][0] = true;
+      }
+
+      /**
+       *****□□*****
+       *****□□*****
+       **/
+      function addTypeThreeBlock() {
+        controlBlocks[4][0] = true;
+        controlBlocks[4][1] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[5][1] = true;
+      }
+
+      /**
+       ****□□******
+       *****□□*****
+       **/
+      function addTypeFourBlock() {
+        controlBlocks[4][0] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[5][1] = true;
+        controlBlocks[6][1] = true;
+      }
+
+      /**
+       *****□□*****
+       ****□□******
+       **/
+      function addTypeFourBlock() {
+        controlBlocks[4][1] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[5][1] = true;
+        controlBlocks[6][0] = true;
+      }
+
+      /**
+       ****□□□****
+       ******□****
+       **/
+      function addTypeFiveBlock() {
+        controlBlocks[4][0] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[6][0] = true;
+        controlBlocks[6][1] = true;
+      }
+
+      /**
+       ****□□□****
+       ****□*******
+       **/
+      function addTypeSixBlock() {
+        controlBlocks[4][0] = true;
+        controlBlocks[4][1] = true;
+        controlBlocks[5][0] = true;
+        controlBlocks[6][0] = true;
       }
     </script>
   </body>
