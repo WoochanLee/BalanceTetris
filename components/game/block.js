@@ -1,3 +1,11 @@
+function initBlockArray(blockArray) {
+  for (let x = 0; x < widthBlockCount; x++) {
+    blockArray[x] = new Array(heightBlockCount);
+  }
+
+  clearBlockArray(blockArray);
+}
+
 function moveToBottomOneLine(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = heightBlockCount - 1; y != 0; y--) {
@@ -25,28 +33,10 @@ function moveToRightOneLine(blockArray) {
   }
 }
 
-function onClickLeftArrow(controlBlocks, stackedBlocks) {
-  if (couldBlockMoveToLeft(controlBlocks, stackedBlocks)) {
-    moveToLeftOneLine(controlBlocks);
-  }
-}
-
-function onClickRightArrow(controlBlocks, stackedBlocks) {
-  if (couldBlockMoveToRight(controlBlocks, stackedBlocks)) {
-    moveToRightOneLine(controlBlocks);
-  }
-}
-
-function onClickDownArrow(controlBlocks, stackedBlocks) {
-  if (couldBlockMoveToBottom(controlBlocks, stackedBlocks)) {
-    moveToBottomOneLine(controlBlocks);
-  }
-}
-
 function couldBlockMoveToBottom(controlBlocks, stackedBlocks) {
   let collisionCheckTmpArray = copyBlockArray(controlBlocks);
 
-  let isBlockReachToBottomSide = isBlockReachToBottomBorder(controlBlocks);
+  let isBlockReachToBottomSide = isBlockReachedToBottomBorder(controlBlocks);
   let isBottomCollided = isBottomSideCollided(
     collisionCheckTmpArray,
     stackedBlocks
@@ -62,7 +52,7 @@ function couldBlockMoveToBottom(controlBlocks, stackedBlocks) {
 function couldBlockMoveToLeft(controlBlocks, stackedBlocks) {
   let collisionCheckTmpArray = copyBlockArray(controlBlocks);
 
-  let isBlockReachToLeftSide = isBlockReachToLeftBorder(controlBlocks);
+  let isBlockReachToLeftSide = isBlockReachedToLeftBorder(controlBlocks);
   let isLeftCollided = isLeftSideCollided(
     collisionCheckTmpArray,
     stackedBlocks
@@ -78,7 +68,7 @@ function couldBlockMoveToLeft(controlBlocks, stackedBlocks) {
 function couldBlockMoveToRight(controlBlocks, stackedBlocks) {
   let collisionCheckTmpArray = copyBlockArray(controlBlocks);
 
-  let isBlockReachToRightSide = isBlockReachToRightBorder(controlBlocks);
+  let isBlockReachToRightSide = isBlockReachedToRightBorder(controlBlocks);
   let isRightCollided = isRightSideCollided(
     collisionCheckTmpArray,
     stackedBlocks
@@ -133,7 +123,7 @@ function isRightSideCollided(collisionCheckTmpArray, stackedBlocks) {
   return false;
 }
 
-function isBlockReachToBottomBorder(blockArray) {
+function isBlockReachedToBottomBorder(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     if (blockArray[x][heightBlockCount - 1]) {
       return true;
@@ -142,9 +132,9 @@ function isBlockReachToBottomBorder(blockArray) {
   return false;
 }
 
-function isBlockReachToLeftBorder(controlBlocks) {
+function isBlockReachedToLeftBorder(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
-    if (controlBlocks[0][y]) {
+    if (blockArray[0][y]) {
       return true;
     }
   }
@@ -152,87 +142,147 @@ function isBlockReachToLeftBorder(controlBlocks) {
   return false;
 }
 
-function isBlockReachToRightBorder(controlBlocks) {
+function isBlockReachedToRightBorder(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
-    if (controlBlocks[widthBlockCount - 1][y]) {
+    if (blockArray[widthBlockCount - 1][y]) {
       return true;
     }
   }
   return false;
 }
 
-/**
- ****□□□□****
- **/
-function addTypeOneBlock(controlBlocks) {
-  controlBlocks[4][0] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[6][0] = true;
-  controlBlocks[7][0] = true;
+function clearBlockArray(blockArray) {
+  for (let x = 0; x < widthBlockCount; x++) {
+    for (let y = 0; y < heightBlockCount; y++) {
+      blockArray[x][y] = false;
+    }
+  }
 }
 
-/**
- ****□□□*****
- *****□******
- **/
-function addTypeTwoBlock(controlBlocks) {
-  controlBlocks[4][0] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[5][1] = true;
-  controlBlocks[6][0] = true;
+function copyBlockArray(blockArray) {
+  let tmpArray = new Array(widthBlockCount);
+  for (let x = 0; x < widthBlockCount; x++) {
+    tmpArray[x] = blockArray[x].slice();
+  }
+  return tmpArray;
 }
 
-/**
- *****□□*****
- *****□□*****
- **/
-function addTypeThreeBlock(controlBlocks) {
-  controlBlocks[4][0] = true;
-  controlBlocks[4][1] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[5][1] = true;
+class ControlBlock {
+  constructor() {
+    this.makeRandomType();
+    this.blockArray = new Array(widthBlockCount);
+    initBlockArray(this.blockArray);
+  }
+
+  makeRandomType() {
+    this.type = Math.floor(Math.random() * 6 + 1);
+  }
+
+  addNewControlBlock() {
+    clearBlockArray(this.blockArray);
+
+    switch (this.type) {
+      case 1:
+        this.addTypeOneBlock(this.blockArray);
+        break;
+      case 2:
+        this.addTypeTwoBlock(this.blockArray);
+        break;
+      case 3:
+        this.addTypeThreeBlock(this.blockArray);
+        break;
+      case 4:
+        this.addTypeFourBlock(this.blockArray);
+        break;
+      case 5:
+        this.addTypeFiveBlock(this.blockArray);
+        break;
+      case 6:
+        this.addTypeSixBlock(this.blockArray);
+        break;
+    }
+  }
+
+  /**
+   ****□□□□****
+   **/
+  addTypeOneBlock(blockArray) {
+    blockArray[4][0] = true;
+    blockArray[5][0] = true;
+    blockArray[6][0] = true;
+    blockArray[7][0] = true;
+  }
+
+  /**
+   ****□□□*****
+   *****□******
+   **/
+  addTypeTwoBlock(blockArray) {
+    blockArray[4][0] = true;
+    blockArray[5][0] = true;
+    blockArray[5][1] = true;
+    blockArray[6][0] = true;
+  }
+
+  /**
+   *****□□*****
+   *****□□*****
+   **/
+  addTypeThreeBlock(blockArray) {
+    blockArray[4][0] = true;
+    blockArray[4][1] = true;
+    blockArray[5][0] = true;
+    blockArray[5][1] = true;
+  }
+
+  /**
+   ****□□******
+   *****□□*****
+   **/
+  addTypeFourBlock(blockArray) {
+    blockArray[4][0] = true;
+    blockArray[5][0] = true;
+    blockArray[5][1] = true;
+    blockArray[6][1] = true;
+  }
+
+  /**
+   *****□□*****
+   ****□□******
+   **/
+  addTypeFourBlock(blockArray) {
+    blockArray[4][1] = true;
+    blockArray[5][0] = true;
+    blockArray[5][1] = true;
+    blockArray[6][0] = true;
+  }
+
+  /**
+   ****□□□****
+   ******□****
+   **/
+  addTypeFiveBlock(blockArray) {
+    blockArray[4][0] = true;
+    blockArray[5][0] = true;
+    blockArray[6][0] = true;
+    blockArray[6][1] = true;
+  }
+
+  /**
+   ****□□□****
+   ****□*******
+   **/
+  addTypeSixBlock(blockArray) {
+    blockArray[4][0] = true;
+    blockArray[4][1] = true;
+    blockArray[5][0] = true;
+    blockArray[6][0] = true;
+  }
 }
 
-/**
- ****□□******
- *****□□*****
- **/
-function addTypeFourBlock(controlBlocks) {
-  controlBlocks[4][0] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[5][1] = true;
-  controlBlocks[6][1] = true;
-}
-
-/**
- *****□□*****
- ****□□******
- **/
-function addTypeFourBlock(controlBlocks) {
-  controlBlocks[4][1] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[5][1] = true;
-  controlBlocks[6][0] = true;
-}
-
-/**
- ****□□□****
- ******□****
- **/
-function addTypeFiveBlock(controlBlocks) {
-  controlBlocks[4][0] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[6][0] = true;
-  controlBlocks[6][1] = true;
-}
-
-/**
- ****□□□****
- ****□*******
- **/
-function addTypeSixBlock(controlBlocks) {
-  controlBlocks[4][0] = true;
-  controlBlocks[4][1] = true;
-  controlBlocks[5][0] = true;
-  controlBlocks[6][0] = true;
+class StakedBlock {
+  constructor() {
+    this.blockArray = new Array(widthBlockCount);
+    initBlockArray(this.blockArray);
+  }
 }

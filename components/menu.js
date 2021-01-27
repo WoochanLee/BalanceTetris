@@ -5,7 +5,7 @@ function onClickTestButton() {
   if (testButtonOn) {
     clearInterval(timeId);
   } else {
-    timeId = setInterval(flowGravity, timePerLine);
+    timeId = setInterval(() => gameScreen.flowGravity(), timePerLine);
   }
   testButtonOn = !testButtonOn;
 }

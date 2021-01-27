@@ -1,19 +1,45 @@
 window.onkeydown = (e) => {
-  console.log(e);
   handleKeyboardEvent(e);
 };
 
 function handleKeyboardEvent(e) {
   switch (e.key) {
     case "ArrowLeft":
-      onClickLeftArrow(controlBlocks, stackedBlocks);
+      onClickLeftArrow(
+        gameScreen.controlBlock.blockArray,
+        gameScreen.stackedBlock.blockArray
+      );
       break;
     case "ArrowRight":
-      onClickRightArrow(controlBlocks, stackedBlocks);
+      onClickRightArrow(
+        gameScreen.controlBlock.blockArray,
+        gameScreen.stackedBlock.blockArray
+      );
       break;
     case "ArrowDown":
-      onClickDownArrow(controlBlocks, stackedBlocks);
+      onClickDownArrow(
+        gameScreen.controlBlock.blockArray,
+        gameScreen.stackedBlock.blockArray
+      );
       break;
   }
-  reDraw();
+  gameScreen.reDraw();
+}
+
+function onClickLeftArrow(controlBlocks, stackedBlocks) {
+  if (couldBlockMoveToLeft(controlBlocks, stackedBlocks)) {
+    moveToLeftOneLine(controlBlocks);
+  }
+}
+
+function onClickRightArrow(controlBlocks, stackedBlocks) {
+  if (couldBlockMoveToRight(controlBlocks, stackedBlocks)) {
+    moveToRightOneLine(controlBlocks);
+  }
+}
+
+function onClickDownArrow(controlBlocks, stackedBlocks) {
+  if (couldBlockMoveToBottom(controlBlocks, stackedBlocks)) {
+    moveToBottomOneLine(controlBlocks);
+  }
 }

@@ -1,6 +1,7 @@
-initBlockArray(stackedBlocks);
-initBlockArray(controlBlocks);
+const gameScreen = new GameScreen();
 
-addNewControlBlock(controlBlocks);
+function init() {
+  gameScreen.controlBlock.addNewControlBlock();
 
-drawBlocks();
+  gameScreen.drawBlocks();
+}
