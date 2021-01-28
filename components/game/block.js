@@ -78,28 +78,28 @@ class ControlBlock {
 
   makeRandomType() {
     this.currentRotateDirection = 0;
-    let randomNum = Math.floor(Math.random() * 7 + 1);
+    let randomNum = Math.floor(Math.random() * 7);
 
     switch (randomNum) {
-      case 1:
+      case 0:
         this.blockType = this.blockTypeOne;
         break;
-      case 2:
+      case 1:
         this.blockType = this.blockTypeTwo;
         break;
-      case 3:
+      case 2:
         this.blockType = this.blockTypeThree;
         break;
-      case 4:
+      case 3:
         this.blockType = this.blockTypeFour;
         break;
-      case 5:
+      case 4:
         this.blockType = this.blockTypeFive;
         break;
-      case 6:
+      case 5:
         this.blockType = this.blockTypeSix;
         break;
-      case 7:
+      case 6:
         this.blockType = this.blockTypeSeven;
         break;
     }
@@ -133,6 +133,10 @@ class ControlBlock {
       );
       controlBlock.blockArray = rotatedBlockArray;
     }
+  }
+
+  removeControlBlock() {
+    clearBlockArray(this.blockArray);
   }
 }
 

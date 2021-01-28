@@ -48,11 +48,50 @@ class GameScreen {
         this.controlBlock.blockArray,
         this.stackedBlock.blockArray
       );
-      this.controlBlock.makeRandomType();
-      this.controlBlock.addNewControlBlock();
+      let removedLineCount = this.removeCompletedLine(0);
+      addScore(removedLineCount);
+
+      if (this.checkIsGameOver(this.stackedBlock.blockArray)) {
+        this.controlBlock.removeControlBlock();
+        gameOver();
+      } else {
+        this.controlBlock.makeRandomType();
+        this.controlBlock.addNewControlBlock();
+        levelUp();
+      }
     }
 
     this.reDraw();
+  }
+
+  removeCompletedLine(lineCount) {
+    console.log("a");
+    let stackedBlockArray = this.stackedBlock.blockArray;
+    for (let y = 0; y < heightBlockCount; y++) {
+      let isCompletedLine = true;
+      for (let x = 0; x < widthBlockCount; x++) {
+        if (!stackedBlockArray[x][y]) {
+          isCompletedLine = false;
+          break;
+        }
+      }
+      if (isCompletedLine) {
+        console.log("b");
+        this.removeLine(y);
+        return this.removeCompletedLine(lineCount + 1);
+      }
+    }
+    console.log("c");
+    return lineCount;
+  }
+
+  removeLine(removeY) {
+    let stackedBlockArray = this.stackedBlock.blockArray;
+    for (let y = removeY; y > 0; y--) {
+      for (let x = 0; x < widthBlockCount; x++) {
+        stackedBlockArray[x][y] = stackedBlockArray[x][y - 1];
+      }
+    }
   }
 
   addBlocksToStackedArray(controlBlocks, stackedBlocks) {
@@ -63,6 +102,15 @@ class GameScreen {
         }
       }
     }
+  }
+
+  checkIsGameOver(stackedBlocks) {
+    for (let x = 0; x < widthBlockCount; x++) {
+      if (stackedBlocks[x][1]) {
+        return true;
+      }
+    }
+    return false;
   }
 
   reDraw() {
@@ -93,14 +141,7 @@ class GameScreen {
   }
 
   onEventDownArrow() {
-    if (
-      couldBlockMoveToBottom(
-        this.controlBlock.blockArray,
-        this.stackedBlock.blockArray
-      )
-    ) {
-      moveToBottomOneLine(this.controlBlock.blockArray);
-    }
+    this.flowGravity();
   }
 
   onEventUpArrow() {

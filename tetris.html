@@ -5,20 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-      .main {
+      body {
         display: flex;
         justify-content: center;
       }
+      .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
       canvas {
+        width: 295px;
+        height: 715px;
         border: 1px solid black;
+      }
+
+      h1 {
+        margin-bottom: -20px;
+      }
+
+      .board {
+        display: flex;
+      }
+
+      #level {
+        margin-right: 10px;
+      }
+
+      #game-over {
+        margin-top: -20px;
+        margin-bottom: 0px;
+        visibility: hidden;
       }
     </style>
   </head>
   <body>
     <div class="main">
-      <button id="test" onclick="onClickTestButton();">스탑</button>
+      <!-- <button id="test" onclick="onClickTestButton();">스탑</button> -->
       <!-- <canvas id="canvas" width="295" height="745"></canvas> -->
+      <h1>BALANCE TETRIS</h1>
+      <div class="board">
+        <h4 id="level">speed : 0</h4>
+        <h4 id="score">score : 0</h4>
+      </div>
+      <h5 id="game-over">GAME OVER</h5>
       <canvas id="canvas" width="295" height="715"></canvas>
     </div>
     <script type="text/javascript" src="util.js"></script>
@@ -27,7 +58,7 @@
       type="text/javascript"
       src="components/game/block-blueprints.js"
     ></script>
-    <script type="text/javascript" src="components/menu.js"></script>
+    <script type="text/javascript" src="components/system.js"></script>
     <script type="text/javascript" src="components/control.js"></script>
     <script type="text/javascript" src="components/game/block.js"></script>
     <script type="text/javascript" src="components/game/screen.js"></script>

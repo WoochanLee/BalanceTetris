@@ -26,10 +26,10 @@ class BlockTypeOne {
   }
 }
 
-//   /**
-//    ****□□□*****
-//    *****□******
-//    **/
+/**
+ ****□□□*****
+ *****□******
+ **/
 class BlockTypeTwo {
   constructor() {
     this.shape = [
@@ -67,16 +67,10 @@ class BlockTypeTwo {
   }
 }
 
-//   /**
-//    *****□□*****
-//    *****□□*****
-//    **/
-//   addTypeThreeBlock() {
-//     this.blockArray[4][0] = true;
-//     this.blockArray[4][1] = true;
-//     this.blockArray[5][0] = true;
-//     this.blockArray[5][1] = true;
-//   }
+/**
+ *****□□*****
+ *****□□*****
+ **/
 class BlockTypeThree {
   constructor() {
     this.shape = [
@@ -89,10 +83,10 @@ class BlockTypeThree {
   }
 }
 
-//   /**
-//    ****□□******
-//    *****□□*****
-//    **/
+/**
+ ****□□******
+ *****□□*****
+ **/
 class BlockTypeFour {
   constructor() {
     this.shape = [
@@ -117,10 +111,10 @@ class BlockTypeFour {
     ];
   }
 }
-//   /**
-//    *****□□*****
-//    ****□□******
-//    **/
+/**
+ *****□□*****
+ ****□□******
+ **/
 class BlockTypeFive {
   constructor() {
     this.shape = [
@@ -146,10 +140,10 @@ class BlockTypeFive {
   }
 }
 
-//   /**
-//    ******□****
-//    ****□□□****
-//    **/
+/**
+ ******□****
+ ****□□□****
+ **/
 class BlockTypeSix {
   constructor() {
     this.shape = [
@@ -187,10 +181,10 @@ class BlockTypeSix {
   }
 }
 
-//   /**
-//    ****□*******
-//    ****□□□****
-//    **/
+/**
+ ****□*******
+ ****□□□****
+ **/
 class BlockTypeSeven {
   constructor() {
     this.shape = [

@@ -3,6 +3,10 @@ window.onkeydown = (e) => {
 };
 
 function handleKeyboardEvent(e) {
+  if (isGameOver) {
+    return;
+  }
+
   switch (e.code) {
     case "ArrowLeft":
       gameScreen.onEventLeftArrow();
