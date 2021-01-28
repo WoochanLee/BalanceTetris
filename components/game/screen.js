@@ -65,7 +65,6 @@ class GameScreen {
   }
 
   removeCompletedLine(lineCount) {
-    console.log("a");
     let stackedBlockArray = this.stackedBlock.blockArray;
     for (let y = 0; y < heightBlockCount; y++) {
       let isCompletedLine = true;
@@ -76,12 +75,10 @@ class GameScreen {
         }
       }
       if (isCompletedLine) {
-        console.log("b");
         this.removeLine(y);
         return this.removeCompletedLine(lineCount + 1);
       }
     }
-    console.log("c");
     return lineCount;
   }
 
