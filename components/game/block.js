@@ -1,3 +1,148 @@
+function findBlockRefPoint(blockArray) {
+  let refPoint = null;
+  for (let x = 0; x < widthBlockCount; x++) {
+    for (let y = 0; y < heightBlockCount; y++) {
+      if (blockArray[x][y]) {
+        refPoint = {
+          x: x,
+          y: y,
+        };
+        break;
+      }
+    }
+    if (refPoint != null) break;
+  }
+  return refPoint;
+}
+
+function getLotatedBlock(
+  rotationBlueprint,
+  currentRotateDirection,
+  controlBlockArray
+) {
+  let tmpArray = copyBlockArray(controlBlockArray);
+  let refPoint = findBlockRefPoint(tmpArray);
+  clearBlockArray(tmpArray);
+
+  if (rotationBlueprint.length == 0) {
+    return null;
+  }
+
+  let r = rotationBlueprint[currentRotateDirection];
+  for (let i = 0; i < r.length; i++) {
+    let rotatedX = refPoint.x + r[i][0];
+    let rotatedY = refPoint.y + r[i][1];
+
+    if (
+      rotatedX >= 0 &&
+      rotatedX < widthBlockCount &&
+      rotatedY >= 0 &&
+      rotatedY < heightBlockCount
+    ) {
+      tmpArray[rotatedX][rotatedY] = true;
+    } else {
+      return null;
+    }
+  }
+
+  return tmpArray;
+}
+
+function getNextRotateDirection(currentRotateDirection, rotationAmount) {
+  let nextRotationDirection = currentRotateDirection + 1;
+  if (nextRotationDirection < rotationAmount) {
+    return nextRotationDirection;
+  } else {
+    return 0;
+  }
+}
+
+class ControlBlock {
+  constructor() {
+    this.currentRotateDirection = 0;
+    this.initBlockTypes();
+    this.makeRandomType();
+    this.blockArray = new Array(widthBlockCount);
+    initBlockArray(this.blockArray);
+  }
+
+  initBlockTypes() {
+    this.blockTypeOne = new BlockTypeOne();
+    this.blockTypeTwo = new BlockTypeTwo();
+    this.blockTypeThree = new BlockTypeThree();
+    this.blockTypeFour = new BlockTypeFour();
+    this.blockTypeFive = new BlockTypeFive();
+    this.blockTypeSix = new BlockTypeSix();
+    this.blockTypeSeven = new BlockTypeSeven();
+  }
+
+  makeRandomType() {
+    this.currentRotateDirection = 0;
+    let randomNum = Math.floor(Math.random() * 7 + 1);
+
+    switch (randomNum) {
+      case 1:
+        this.blockType = this.blockTypeOne;
+        break;
+      case 2:
+        this.blockType = this.blockTypeTwo;
+        break;
+      case 3:
+        this.blockType = this.blockTypeThree;
+        break;
+      case 4:
+        this.blockType = this.blockTypeFour;
+        break;
+      case 5:
+        this.blockType = this.blockTypeFive;
+        break;
+      case 6:
+        this.blockType = this.blockTypeSix;
+        break;
+      case 7:
+        this.blockType = this.blockTypeSeven;
+        break;
+    }
+  }
+
+  addNewControlBlock() {
+    clearBlockArray(this.blockArray);
+
+    let shape = this.blockType.shape;
+    for (let i = 0; i < shape.length; i++) {
+      this.blockArray[shape[i][0]][shape[i][1]] = true;
+    }
+  }
+
+  rotateBlock(controlBlock, stackedBlockArray) {
+    let controlBlockArray = controlBlock.blockArray;
+    let rotatedBlockArray = getLotatedBlock(
+      this.blockType.rotationBlueprint,
+      this.currentRotateDirection,
+      controlBlockArray
+    );
+
+    if (rotatedBlockArray == null) {
+      return;
+    }
+
+    if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
+      this.currentRotateDirection = getNextRotateDirection(
+        this.currentRotateDirection,
+        this.blockType.rotationBlueprint.length
+      );
+      controlBlock.blockArray = rotatedBlockArray;
+    }
+  }
+}
+
+class StakedBlock {
+  constructor() {
+    this.blockArray = new Array(widthBlockCount);
+    initBlockArray(this.blockArray);
+  }
+}
+
 function initBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     blockArray[x] = new Array(heightBlockCount);
@@ -81,40 +226,28 @@ function couldBlockMoveToRight(controlBlocks, stackedBlocks) {
   return true;
 }
 
-function isBottomSideCollided(collisionCheckTmpArray, stackedBlocks) {
-  moveToBottomOneLine(collisionCheckTmpArray);
+function isBottomSideCollided(blockArray1, blockArray2) {
+  moveToBottomOneLine(blockArray1);
 
-  for (let x = 0; x < widthBlockCount; x++) {
-    for (let y = 0; y < heightBlockCount; y++) {
-      if (collisionCheckTmpArray[x][y] && stackedBlocks[x][y]) {
-        return true;
-      }
-    }
-  }
-
-  return false;
+  return isOverlaped(blockArray1, blockArray2);
 }
 
-function isLeftSideCollided(collisionCheckTmpArray, stackedBlocks) {
-  moveToLeftOneLine(collisionCheckTmpArray);
+function isLeftSideCollided(blockArray1, blockArray2) {
+  moveToLeftOneLine(blockArray1);
 
-  for (let x = 0; x < widthBlockCount; x++) {
-    for (let y = 0; y < heightBlockCount; y++) {
-      if (collisionCheckTmpArray[x][y] && stackedBlocks[x][y]) {
-        return true;
-      }
-    }
-  }
-
-  return false;
+  return isOverlaped(blockArray1, blockArray2);
 }
 
-function isRightSideCollided(collisionCheckTmpArray, stackedBlocks) {
-  moveToRightOneLine(collisionCheckTmpArray);
+function isRightSideCollided(blockArray1, blockArray2) {
+  moveToRightOneLine(blockArray1);
 
+  return isOverlaped(blockArray1, blockArray2);
+}
+
+function isOverlaped(blockArray1, blockArray2) {
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = 0; y < heightBlockCount; y++) {
-      if (collisionCheckTmpArray[x][y] && stackedBlocks[x][y]) {
+      if (blockArray1[x][y] && blockArray2[x][y]) {
         return true;
       }
     }
@@ -165,124 +298,4 @@ function copyBlockArray(blockArray) {
     tmpArray[x] = blockArray[x].slice();
   }
   return tmpArray;
-}
-
-class ControlBlock {
-  constructor() {
-    this.makeRandomType();
-    this.blockArray = new Array(widthBlockCount);
-    initBlockArray(this.blockArray);
-  }
-
-  makeRandomType() {
-    this.type = Math.floor(Math.random() * 6 + 1);
-  }
-
-  addNewControlBlock() {
-    clearBlockArray(this.blockArray);
-
-    switch (this.type) {
-      case 1:
-        this.addTypeOneBlock(this.blockArray);
-        break;
-      case 2:
-        this.addTypeTwoBlock(this.blockArray);
-        break;
-      case 3:
-        this.addTypeThreeBlock(this.blockArray);
-        break;
-      case 4:
-        this.addTypeFourBlock(this.blockArray);
-        break;
-      case 5:
-        this.addTypeFiveBlock(this.blockArray);
-        break;
-      case 6:
-        this.addTypeSixBlock(this.blockArray);
-        break;
-    }
-  }
-
-  /**
-   ****□□□□****
-   **/
-  addTypeOneBlock(blockArray) {
-    blockArray[4][0] = true;
-    blockArray[5][0] = true;
-    blockArray[6][0] = true;
-    blockArray[7][0] = true;
-  }
-
-  /**
-   ****□□□*****
-   *****□******
-   **/
-  addTypeTwoBlock(blockArray) {
-    blockArray[4][0] = true;
-    blockArray[5][0] = true;
-    blockArray[5][1] = true;
-    blockArray[6][0] = true;
-  }
-
-  /**
-   *****□□*****
-   *****□□*****
-   **/
-  addTypeThreeBlock(blockArray) {
-    blockArray[4][0] = true;
-    blockArray[4][1] = true;
-    blockArray[5][0] = true;
-    blockArray[5][1] = true;
-  }
-
-  /**
-   ****□□******
-   *****□□*****
-   **/
-  addTypeFourBlock(blockArray) {
-    blockArray[4][0] = true;
-    blockArray[5][0] = true;
-    blockArray[5][1] = true;
-    blockArray[6][1] = true;
-  }
-
-  /**
-   *****□□*****
-   ****□□******
-   **/
-  addTypeFourBlock(blockArray) {
-    blockArray[4][1] = true;
-    blockArray[5][0] = true;
-    blockArray[5][1] = true;
-    blockArray[6][0] = true;
-  }
-
-  /**
-   ****□□□****
-   ******□****
-   **/
-  addTypeFiveBlock(blockArray) {
-    blockArray[4][0] = true;
-    blockArray[5][0] = true;
-    blockArray[6][0] = true;
-    blockArray[6][1] = true;
-  }
-
-  /**
-   ****□□□****
-   ****□*******
-   **/
-  addTypeSixBlock(blockArray) {
-    blockArray[4][0] = true;
-    blockArray[4][1] = true;
-    blockArray[5][0] = true;
-    blockArray[6][0] = true;
-  }
-}
-
-class StakedBlock {
-  constructor() {
-    this.blockArray = new Array(widthBlockCount);
-    initBlockArray(this.blockArray);
-  }
 }

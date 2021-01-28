@@ -6,9 +6,11 @@ class GameScreen {
 
     this.stackedBlock = new StakedBlock();
     this.controlBlock = new ControlBlock();
+    this.isSpaceDownRunning = false;
   }
 
   drawBlocks() {
+    //logBlockArray(this.controlBlock.blockArray);
     for (let x = 0; x < widthBlockCount; x++) {
       for (let y = 0; y < heightBlockCount; y++) {
         if (this.stackedBlock.blockArray[x][y]) {
@@ -41,6 +43,7 @@ class GameScreen {
     ) {
       moveToBottomOneLine(this.controlBlock.blockArray);
     } else {
+      this.isSpaceDownRunning = false;
       this.addBlocksToStackedArray(
         this.controlBlock.blockArray,
         this.stackedBlock.blockArray
@@ -65,5 +68,52 @@ class GameScreen {
   reDraw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawBlocks();
+  }
+
+  onEventLeftArrow() {
+    if (
+      couldBlockMoveToLeft(
+        this.controlBlock.blockArray,
+        this.stackedBlock.blockArray
+      )
+    ) {
+      moveToLeftOneLine(this.controlBlock.blockArray);
+    }
+  }
+
+  onEventRightArrow() {
+    if (
+      couldBlockMoveToRight(
+        this.controlBlock.blockArray,
+        this.stackedBlock.blockArray
+      )
+    ) {
+      moveToRightOneLine(this.controlBlock.blockArray);
+    }
+  }
+
+  onEventDownArrow() {
+    if (
+      couldBlockMoveToBottom(
+        this.controlBlock.blockArray,
+        this.stackedBlock.blockArray
+      )
+    ) {
+      moveToBottomOneLine(this.controlBlock.blockArray);
+    }
+  }
+
+  onEventUpArrow() {
+    this.controlBlock.rotateBlock(
+      this.controlBlock,
+      this.stackedBlock.blockArray
+    );
+  }
+
+  onEventSpace() {
+    this.isSpaceDownRunning = true;
+    while (this.isSpaceDownRunning) {
+      this.flowGravity();
+    }
   }
 }
