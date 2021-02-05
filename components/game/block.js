@@ -114,8 +114,12 @@ class ControlBlock {
     }
   }
 
-  rotateBlock(controlBlock, stackedBlockArray) {
-    let controlBlockArray = controlBlock.blockArray;
+  rotateBlock(
+    controlBlock,
+    controlBlockArray,
+    stackedBlockArray,
+    allowableRange
+  ) {
     let rotatedBlockArray = getLotatedBlock(
       this.blockType.rotationBlueprint,
       this.currentRotateDirection,
@@ -123,7 +127,27 @@ class ControlBlock {
     );
 
     if (rotatedBlockArray == null) {
-      return;
+      if (allowableRange > 0) {
+        let couldLeftRotate = this.checkLeftMoveRotation(
+          controlBlock,
+          controlBlockArray,
+          stackedBlockArray,
+          allowableRange
+        );
+
+        if (couldLeftRotate) {
+          return true;
+        } else {
+          return this.checkRightMoveRotation(
+            controlBlock,
+            controlBlockArray,
+            stackedBlockArray,
+            allowableRange
+          );
+        }
+      } else {
+        return false;
+      }
     }
 
     if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
@@ -132,6 +156,47 @@ class ControlBlock {
         this.blockType.rotationBlueprint.length
       );
       controlBlock.blockArray = rotatedBlockArray;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkLeftMoveRotation(
+    controlBlock,
+    controlBlockArray,
+    stackedBlockArray,
+    allowableRange
+  ) {
+    let tmpArray = copyBlockArray(controlBlockArray);
+    if (couldBlockMoveToLeft(tmpArray, stackedBlockArray)) {
+      moveToLeftOneLine(tmpArray);
+
+      return this.rotateBlock(
+        controlBlock,
+        tmpArray,
+        stackedBlockArray,
+        allowableRange - 1
+      );
+    }
+  }
+
+  checkRightMoveRotation(
+    controlBlock,
+    controlBlockArray,
+    stackedBlockArray,
+    allowableRange
+  ) {
+    let tmpArray = copyBlockArray(controlBlockArray);
+    if (couldBlockMoveToRight(tmpArray, stackedBlockArray)) {
+      moveToRightOneLine(tmpArray);
+
+      return this.rotateBlock(
+        controlBlock,
+        tmpArray,
+        stackedBlockArray,
+        allowableRange - 1
+      );
     }
   }
 

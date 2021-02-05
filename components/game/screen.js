@@ -144,7 +144,9 @@ class GameScreen {
   onEventUpArrow() {
     this.controlBlock.rotateBlock(
       this.controlBlock,
-      this.stackedBlock.blockArray
+      this.controlBlock.blockArray,
+      this.stackedBlock.blockArray,
+      allowableRotationRange
     );
   }
 
