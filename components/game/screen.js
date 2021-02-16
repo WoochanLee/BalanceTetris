@@ -13,14 +13,17 @@ class GameScreen {
     //logBlockArray(this.controlBlock.blockArray);
     for (let x = 0; x < widthBlockCount; x++) {
       for (let y = 0; y < heightBlockCount; y++) {
-        if (this.stackedBlock.blockArray[x][y].isExist) {
-          this.ctx.fillStyle = "black";
+        let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
+        if (stackedSingleBlock.isExist) {
+          console.log("test");
+          this.ctx.fillStyle = stackedSingleBlock.blockColor;
         } else {
-          this.ctx.fillStyle = "gray";
+          this.ctx.fillStyle = "#828282";
         }
 
-        if (this.controlBlock.blockArray[x][y].isExist) {
-          this.ctx.fillStyle = "blue";
+        let controlSingleBlock = this.controlBlock.blockArray[x][y];
+        if (controlSingleBlock.isExist) {
+          this.ctx.fillStyle = controlSingleBlock.blockColor;
         }
 
         this.ctx.fillRect(
@@ -55,7 +58,6 @@ class GameScreen {
         this.controlBlock.removeControlBlock();
         gameOver();
       } else {
-        this.controlBlock.makeRandomType();
         this.controlBlock.addNewControlBlock();
         levelUp();
       }
@@ -95,7 +97,7 @@ class GameScreen {
     for (let x = 0; x < widthBlockCount; x++) {
       for (let y = 0; y < heightBlockCount; y++) {
         if (controlBlocks[x][y].isExist) {
-          stackedBlocks[x][y].isExist = true;
+          copySingleBlock(stackedBlocks[x][y], controlBlocks[x][y]);
         }
       }
     }

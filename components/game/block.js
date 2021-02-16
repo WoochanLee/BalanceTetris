@@ -18,6 +18,7 @@ function findBlockRefPoint(blockArray) {
 function getLotatedBlock(
   rotationBlueprint,
   currentRotateDirection,
+  controlBlock,
   controlBlockArray
 ) {
   let tmpArray = copyBlockArray(controlBlockArray);
@@ -40,6 +41,7 @@ function getLotatedBlock(
       rotatedY < heightBlockCount
     ) {
       tmpArray[rotatedX][rotatedY].isExist = true;
+      tmpArray[rotatedX][rotatedY].blockColor = controlBlock.blockColor;
     } else {
       return null;
     }
@@ -62,6 +64,7 @@ class ControlBlock {
     this.currentRotateDirection = 0;
     this.initBlockTypes();
     this.makeRandomType();
+    this.makeRandomColor();
     this.blockArray = new Array(widthBlockCount);
     initBlockArray(this.blockArray);
   }
@@ -105,12 +108,50 @@ class ControlBlock {
     }
   }
 
+  makeRandomColor() {
+    let randomNum = Math.floor(Math.random() * 7);
+
+    switch (randomNum) {
+      case 0:
+        this.blockColor = "#EEAFAF";
+        break;
+      case 1:
+        this.blockColor = "#AFC4E7";
+        break;
+      case 2:
+        this.blockColor = "#BAE7AF";
+        break;
+      case 3:
+        this.blockColor = "#FFF77F";
+        break;
+      case 4:
+        this.blockColor = "#FF7F7F";
+        break;
+      case 5:
+        this.blockColor = "#FDC4F8";
+        break;
+      case 6:
+        this.blockColor = "#CB9FFD";
+        break;
+      case 7:
+        this.blockColor = "#A9E1ED";
+        break;
+      case 8:
+        this.blockColor = "#F3CDA0";
+        break;
+    }
+  }
+
   addNewControlBlock() {
+    this.makeRandomType();
+    this.makeRandomColor();
     clearBlockArray(this.blockArray);
 
     let shape = this.blockType.shape;
     for (let i = 0; i < shape.length; i++) {
-      this.blockArray[shape[i][0]][shape[i][1]].isExist = true;
+      let block = this.blockArray[shape[i][0]][shape[i][1]];
+      block.isExist = true;
+      block.blockColor = this.blockColor;
     }
   }
 
@@ -123,6 +164,7 @@ class ControlBlock {
     let rotatedBlockArray = getLotatedBlock(
       this.blockType.rotationBlueprint,
       this.currentRotateDirection,
+      controlBlock,
       controlBlockArray
     );
 
@@ -215,9 +257,9 @@ class StakedBlock {
 function initBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     blockArray[x] = new Array(heightBlockCount);
-    for(let y = 0; y < heightBlockCount; y++) {
+    for (let y = 0; y < heightBlockCount; y++) {
       blockArray[x][y] = {
-        isExist : false
+        isExist: false,
       };
     }
   }
@@ -362,6 +404,7 @@ function clearBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = 0; y < heightBlockCount; y++) {
       blockArray[x][y].isExist = false;
+      blockArray[x][y].blockColor = null;
     }
   }
 }
@@ -377,7 +420,7 @@ function copyBlockArray(blockArray) {
   return tmpArray;
 }
 
-
 function copySingleBlock(blockTo, blockFrom) {
   blockTo.isExist = blockFrom.isExist;
+  blockTo.blockColor = blockFrom.blockColor;
 }
