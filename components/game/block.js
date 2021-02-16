@@ -2,7 +2,7 @@ function findBlockRefPoint(blockArray) {
   let refPoint = null;
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = 0; y < heightBlockCount; y++) {
-      if (blockArray[x][y]) {
+      if (blockArray[x][y].isExist) {
         refPoint = {
           x: x,
           y: y,
@@ -39,7 +39,7 @@ function getLotatedBlock(
       rotatedY >= 0 &&
       rotatedY < heightBlockCount
     ) {
-      tmpArray[rotatedX][rotatedY] = true;
+      tmpArray[rotatedX][rotatedY].isExist = true;
     } else {
       return null;
     }
@@ -110,7 +110,7 @@ class ControlBlock {
 
     let shape = this.blockType.shape;
     for (let i = 0; i < shape.length; i++) {
-      this.blockArray[shape[i][0]][shape[i][1]] = true;
+      this.blockArray[shape[i][0]][shape[i][1]].isExist = true;
     }
   }
 
@@ -215,6 +215,11 @@ class StakedBlock {
 function initBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     blockArray[x] = new Array(heightBlockCount);
+    for(let y = 0; y < heightBlockCount; y++) {
+      blockArray[x][y] = {
+        isExist : false
+      };
+    }
   }
 
   clearBlockArray(blockArray);
@@ -223,27 +228,27 @@ function initBlockArray(blockArray) {
 function moveToBottomOneLine(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = heightBlockCount - 1; y != 0; y--) {
-      blockArray[x][y] = blockArray[x][y - 1];
+      copySingleBlock(blockArray[x][y], blockArray[x][y - 1]);
     }
-    blockArray[x][0] = false;
+    blockArray[x][0].isExist = false;
   }
 }
 
 function moveToLeftOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
     for (let x = 0; x < widthBlockCount - 1; x++) {
-      blockArray[x][y] = blockArray[x + 1][y];
+      copySingleBlock(blockArray[x][y], blockArray[x + 1][y]);
     }
-    blockArray[widthBlockCount - 1][y] = false;
+    blockArray[widthBlockCount - 1][y].isExist = false;
   }
 }
 
 function moveToRightOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
     for (let x = widthBlockCount - 1; x != 0; x--) {
-      blockArray[x][y] = blockArray[x - 1][y];
+      copySingleBlock(blockArray[x][y], blockArray[x - 1][y]);
     }
-    blockArray[0][y] = false;
+    blockArray[0][y].isExist = false;
   }
 }
 
@@ -316,7 +321,7 @@ function isRightSideCollided(blockArray1, blockArray2) {
 function isOverlaped(blockArray1, blockArray2) {
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = 0; y < heightBlockCount; y++) {
-      if (blockArray1[x][y] && blockArray2[x][y]) {
+      if (blockArray1[x][y].isExist && blockArray2[x][y].isExist) {
         return true;
       }
     }
@@ -327,7 +332,7 @@ function isOverlaped(blockArray1, blockArray2) {
 
 function isBlockReachedToBottomBorder(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
-    if (blockArray[x][heightBlockCount - 1]) {
+    if (blockArray[x][heightBlockCount - 1].isExist) {
       return true;
     }
   }
@@ -336,7 +341,7 @@ function isBlockReachedToBottomBorder(blockArray) {
 
 function isBlockReachedToLeftBorder(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
-    if (blockArray[0][y]) {
+    if (blockArray[0][y].isExist) {
       return true;
     }
   }
@@ -346,7 +351,7 @@ function isBlockReachedToLeftBorder(blockArray) {
 
 function isBlockReachedToRightBorder(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
-    if (blockArray[widthBlockCount - 1][y]) {
+    if (blockArray[widthBlockCount - 1][y].isExist) {
       return true;
     }
   }
@@ -356,15 +361,23 @@ function isBlockReachedToRightBorder(blockArray) {
 function clearBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount; x++) {
     for (let y = 0; y < heightBlockCount; y++) {
-      blockArray[x][y] = false;
+      blockArray[x][y].isExist = false;
     }
   }
 }
 
 function copyBlockArray(blockArray) {
   let tmpArray = new Array(widthBlockCount);
+  initBlockArray(tmpArray);
   for (let x = 0; x < widthBlockCount; x++) {
-    tmpArray[x] = blockArray[x].slice();
+    for (let y = 0; y < heightBlockCount; y++) {
+      copySingleBlock(tmpArray[x][y], blockArray[x][y]);
+    }
   }
   return tmpArray;
+}
+
+
+function copySingleBlock(blockTo, blockFrom) {
+  blockTo.isExist = blockFrom.isExist;
 }

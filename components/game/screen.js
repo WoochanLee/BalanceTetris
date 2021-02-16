@@ -13,13 +13,13 @@ class GameScreen {
     //logBlockArray(this.controlBlock.blockArray);
     for (let x = 0; x < widthBlockCount; x++) {
       for (let y = 0; y < heightBlockCount; y++) {
-        if (this.stackedBlock.blockArray[x][y]) {
+        if (this.stackedBlock.blockArray[x][y].isExist) {
           this.ctx.fillStyle = "black";
         } else {
           this.ctx.fillStyle = "gray";
         }
 
-        if (this.controlBlock.blockArray[x][y]) {
+        if (this.controlBlock.blockArray[x][y].isExist) {
           this.ctx.fillStyle = "blue";
         }
 
@@ -69,7 +69,7 @@ class GameScreen {
     for (let y = 0; y < heightBlockCount; y++) {
       let isCompletedLine = true;
       for (let x = 0; x < widthBlockCount; x++) {
-        if (!stackedBlockArray[x][y]) {
+        if (!stackedBlockArray[x][y].isExist) {
           isCompletedLine = false;
           break;
         }
@@ -86,7 +86,7 @@ class GameScreen {
     let stackedBlockArray = this.stackedBlock.blockArray;
     for (let y = removeY; y > 0; y--) {
       for (let x = 0; x < widthBlockCount; x++) {
-        stackedBlockArray[x][y] = stackedBlockArray[x][y - 1];
+        copySingleBlock(stackedBlockArray[x][y], stackedBlockArray[x][y - 1]);
       }
     }
   }
@@ -94,8 +94,8 @@ class GameScreen {
   addBlocksToStackedArray(controlBlocks, stackedBlocks) {
     for (let x = 0; x < widthBlockCount; x++) {
       for (let y = 0; y < heightBlockCount; y++) {
-        if (controlBlocks[x][y]) {
-          stackedBlocks[x][y] = true;
+        if (controlBlocks[x][y].isExist) {
+          stackedBlocks[x][y].isExist = true;
         }
       }
     }
@@ -103,7 +103,7 @@ class GameScreen {
 
   checkIsGameOver(stackedBlocks) {
     for (let x = 0; x < widthBlockCount; x++) {
-      if (stackedBlocks[x][1]) {
+      if (stackedBlocks[x][1].isExist) {
         return true;
       }
     }
