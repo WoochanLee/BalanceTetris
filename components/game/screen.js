@@ -15,7 +15,6 @@ class GameScreen {
       for (let y = 0; y < heightBlockCount; y++) {
         let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
         if (stackedSingleBlock.isExist) {
-          console.log("test");
           this.ctx.fillStyle = stackedSingleBlock.blockColor;
         } else {
           this.ctx.fillStyle = "#828282";
