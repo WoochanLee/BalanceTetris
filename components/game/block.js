@@ -149,7 +149,9 @@ class ControlBlock {
 
     let shape = this.blockType.shape;
     for (let i = 0; i < shape.length; i++) {
-      let block = this.blockArray[shape[i][0]][shape[i][1]];
+      let block = this.blockArray[shape[i][0] + widthBlockPaddingCount][
+        shape[i][1]
+      ];
       block.isExist = true;
       block.blockColor = this.blockColor;
     }

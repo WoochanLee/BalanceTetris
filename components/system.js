@@ -3,7 +3,6 @@ let timeId = null;
 
 let currentDifficulty = 0;
 let score = 0;
-let increaseSpeedPerDifficulty = 0.985;
 
 let levelText = document.getElementById("level");
 let scoreText = document.getElementById("score");

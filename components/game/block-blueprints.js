@@ -3,11 +3,15 @@
  **/
 class BlockTypeOne {
   constructor() {
+    this.widthBlockCount = 4;
+    this.widthBlockMarginCount = 0;
+    this.heightBlockCount = 1;
+    this.heightBlockMarginCount = 1;
     this.shape = [
+      [0, 1],
+      [1, 1],
+      [2, 1],
       [3, 1],
-      [4, 1],
-      [5, 1],
-      [6, 1],
     ];
     this.rotationBlueprint = [
       [
@@ -32,11 +36,15 @@ class BlockTypeOne {
  **/
 class BlockTypeTwo {
   constructor() {
+    this.widthBlockCount = 3;
+    this.widthBlockMarginCount = 1;
+    this.heightBlockCount = 2;
+    this.heightBlockMarginCount = 1;
     this.shape = [
-      [4, 1],
-      [5, 1],
-      [5, 2],
-      [6, 1],
+      [1, 1],
+      [2, 1],
+      [2, 2],
+      [3, 1],
     ];
     this.rotationBlueprint = [
       [
@@ -73,11 +81,15 @@ class BlockTypeTwo {
  **/
 class BlockTypeThree {
   constructor() {
+    this.widthBlockCount = 2;
+    this.widthBlockMarginCount = 1;
+    this.heightBlockCount = 2;
+    this.heightBlockMarginCount = 1;
     this.shape = [
-      [4, 1],
-      [4, 2],
-      [5, 1],
-      [5, 2],
+      [1, 1],
+      [1, 2],
+      [2, 1],
+      [2, 2],
     ];
     this.rotationBlueprint = [];
   }
@@ -89,11 +101,15 @@ class BlockTypeThree {
  **/
 class BlockTypeFour {
   constructor() {
+    this.widthBlockCount = 3;
+    this.widthBlockMarginCount = 1;
+    this.heightBlockCount = 2;
+    this.heightBlockMarginCount = 1;
     this.shape = [
-      [4, 1],
-      [5, 1],
-      [5, 2],
-      [6, 2],
+      [1, 1],
+      [2, 1],
+      [2, 2],
+      [3, 2],
     ];
     this.rotationBlueprint = [
       [
@@ -117,11 +133,15 @@ class BlockTypeFour {
  **/
 class BlockTypeFive {
   constructor() {
+    this.widthBlockCount = 3;
+    this.widthBlockMarginCount = 1;
+    this.heightBlockCount = 2;
+    this.heightBlockMarginCount = 1;
     this.shape = [
-      [4, 2],
-      [5, 1],
-      [5, 2],
-      [6, 1],
+      [1, 2],
+      [2, 1],
+      [2, 2],
+      [3, 1],
     ];
     this.rotationBlueprint = [
       [
@@ -146,11 +166,15 @@ class BlockTypeFive {
  **/
 class BlockTypeSix {
   constructor() {
+    this.widthBlockCount = 3;
+    this.widthBlockMarginCount = 1;
+    this.heightBlockCount = 2;
+    this.heightBlockMarginCount = 1;
     this.shape = [
-      [4, 2],
-      [5, 2],
-      [6, 1],
-      [6, 2],
+      [1, 2],
+      [2, 2],
+      [3, 1],
+      [3, 2],
     ];
     this.rotationBlueprint = [
       [
@@ -187,11 +211,15 @@ class BlockTypeSix {
  **/
 class BlockTypeSeven {
   constructor() {
+    this.widthBlockCount = 3;
+    this.widthBlockMarginCount = 1;
+    this.heightBlockCount = 2;
+    this.heightBlockMarginCount = 1;
     this.shape = [
-      [4, 1],
-      [4, 2],
-      [5, 2],
-      [6, 2],
+      [1, 1],
+      [1, 2],
+      [2, 2],
+      [3, 2],
     ];
     this.rotationBlueprint = [
       [

@@ -1,9 +1,6 @@
-const timePerLine = 500;
-
-const borderWidth = 5;
-const blockSize = 25;
-const widthBlockCount = 10;
-const heightBlockCount = 25;
-const topMargin = -30;
-
+/**
+ * game setting
+ */
+const timePerLine = 1000;
+const increaseSpeedPerDifficulty = 0.99;
 const allowableRotationRange = 2;
