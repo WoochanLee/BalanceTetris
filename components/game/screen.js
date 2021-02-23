@@ -13,13 +13,6 @@ const widthBlockCount = 10;
 const widthBlockPaddingCount = 3;
 const heightBlockCount = 25;
 
-/**
- * preview block setting
- */
-const previewBlockLocationX = 450;
-const previewBlockLocationY = 50;
-const previewBlockRadius = 45;
-
 class GameScreen {
   constructor() {
     this.canvas = document.getElementById("canvas");
@@ -28,11 +21,7 @@ class GameScreen {
 
     this.stackedBlock = new StakedBlock();
     this.controlBlock = new ControlBlock();
-    this.previewBlock = new PreviewBlock(
-      previewBlockLocationX,
-      previewBlockLocationY,
-      previewBlockRadius
-    );
+    this.previewBlockManager = new PreviewBlockManager();
     this.isSpaceDownRunning = false;
   }
 
@@ -68,40 +57,8 @@ class GameScreen {
   }
 
   drawNextBlocks() {
-    this.previewBlock.setBlockType(this.controlBlock.blockType);
-    this.previewBlock.draw(this.ctx);
-    // let previewBlockCount = 4;
-    // let previewBlockSize = 12;
-    // let previewBorderWidth = 3;
-
-    // let locationX = 400;
-    // let locationY = 100;
-
-    // let previewBlockRadius = 45;
-
-    // this.ctx.fillStyle = "blue";
-    // this.ctx.beginPath();
-    // this.ctx.arc(
-    //   locationX + previewBlockRadius,
-    //   locationY + previewBlockRadius,
-    //   previewBlockRadius,
-    //   0,
-    //   Math.PI * 2,
-    //   false
-    // );
-    // this.ctx.fill();
-    // this.ctx.fillStyle = "#828282";
-    // for (let x = 0; x < previewBlockCount; x++) {
-    //   for (let y = 0; y < previewBlockCount; y++) {
-    //     this.ctx.fillRect(
-    //       previewBorderWidth * x + previewBlockSize * x + locationX,
-    //       previewBorderWidth * y + previewBlockSize * y + locationY,
-    //       previewBlockSize,
-    //       previewBlockSize
-    //     );
-    //   }
-    // }
-    //this.ctx.fillRect(locationX, locationY, previewBlockSize, previewBlockSize);
+    this.previewBlockManager.setBlockType(this.controlBlock.previewBlockQueue);
+    this.previewBlockManager.draw(this.ctx);
   }
 
   flowGravity() {

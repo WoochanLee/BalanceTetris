@@ -41,7 +41,8 @@ function getLotatedBlock(
       rotatedY < heightBlockCount
     ) {
       tmpArray[rotatedX][rotatedY].isExist = true;
-      tmpArray[rotatedX][rotatedY].blockColor = controlBlock.blockColor;
+      tmpArray[rotatedX][rotatedY].blockColor =
+        controlBlock.controlBlockType.blockColor;
     } else {
       return null;
     }
@@ -63,8 +64,7 @@ class ControlBlock {
   constructor() {
     this.currentRotateDirection = 0;
     this.initBlockTypes();
-    this.makeRandomType();
-    this.makeRandomColor();
+    this.initPreviewBlocks();
     this.blockArray = new Array(widthBlockCount);
     initBlockArray(this.blockArray);
   }
@@ -79,32 +79,40 @@ class ControlBlock {
     this.blockTypeSeven = new BlockTypeSeven();
   }
 
+  initControlBlockType() {
+    this.controlBlockType = new ControlBlockType(
+      this.makeRandomType(),
+      this.makeRandomColor()
+    );
+  }
+
+  initPreviewBlocks() {
+    this.previewBlockQueue = new Queue();
+    for (let i = 0; i < previewBlockLocation.length; i++) {
+      this.previewBlockQueue.enqueue(
+        new ControlBlockType(this.makeRandomType(), this.makeRandomColor())
+      );
+    }
+  }
+
   makeRandomType() {
-    this.currentRotateDirection = 0;
     let randomNum = Math.floor(Math.random() * 7);
 
     switch (randomNum) {
       case 0:
-        this.blockType = this.blockTypeOne;
-        break;
+        return this.blockTypeOne;
       case 1:
-        this.blockType = this.blockTypeTwo;
-        break;
+        return this.blockTypeTwo;
       case 2:
-        this.blockType = this.blockTypeThree;
-        break;
+        return this.blockTypeThree;
       case 3:
-        this.blockType = this.blockTypeFour;
-        break;
+        return this.blockTypeFour;
       case 4:
-        this.blockType = this.blockTypeFive;
-        break;
+        return this.blockTypeFive;
       case 5:
-        this.blockType = this.blockTypeSix;
-        break;
+        return this.blockTypeSix;
       case 6:
-        this.blockType = this.blockTypeSeven;
-        break;
+        return this.blockTypeSeven;
     }
   }
 
@@ -113,47 +121,41 @@ class ControlBlock {
 
     switch (randomNum) {
       case 0:
-        this.blockColor = "#EEAFAF";
-        break;
+        return "#EEAFAF";
       case 1:
-        this.blockColor = "#AFC4E7";
-        break;
+        return "#AFC4E7";
       case 2:
-        this.blockColor = "#BAE7AF";
-        break;
+        return "#BAE7AF";
       case 3:
-        this.blockColor = "#FFF77F";
-        break;
+        return "#FFF77F";
       case 4:
-        this.blockColor = "#FF7F7F";
-        break;
+        return "#FF7F7F";
       case 5:
-        this.blockColor = "#FDC4F8";
-        break;
+        return "#FDC4F8";
       case 6:
-        this.blockColor = "#CB9FFD";
-        break;
+        return "#CB9FFD";
       case 7:
-        this.blockColor = "#A9E1ED";
-        break;
+        return "#A9E1ED";
       case 8:
-        this.blockColor = "#F3CDA0";
-        break;
+        return "#F3CDA0";
     }
   }
 
   addNewControlBlock() {
-    this.makeRandomType();
-    this.makeRandomColor();
+    this.currentRotateDirection = 0;
+    this.controlBlockType = this.previewBlockQueue.dequeue();
+    this.previewBlockQueue.enqueue(
+      new ControlBlockType(this.makeRandomType(), this.makeRandomColor())
+    );
     clearBlockArray(this.blockArray);
 
-    let shape = this.blockType.shape;
+    let shape = this.controlBlockType.blockType.shape;
     for (let i = 0; i < shape.length; i++) {
       let block = this.blockArray[shape[i][0] + widthBlockPaddingCount][
         shape[i][1]
       ];
       block.isExist = true;
-      block.blockColor = this.blockColor;
+      block.blockColor = this.controlBlockType.blockColor;
     }
   }
 
@@ -164,7 +166,7 @@ class ControlBlock {
     allowableRange
   ) {
     let rotatedBlockArray = getLotatedBlock(
-      this.blockType.rotationBlueprint,
+      this.controlBlockType.blockType.rotationBlueprint,
       this.currentRotateDirection,
       controlBlock,
       controlBlockArray
@@ -197,7 +199,7 @@ class ControlBlock {
     if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
       this.currentRotateDirection = getNextRotateDirection(
         this.currentRotateDirection,
-        this.blockType.rotationBlueprint.length
+        this.controlBlockType.blockType.rotationBlueprint.length
       );
       controlBlock.blockArray = rotatedBlockArray;
       return true;
@@ -246,6 +248,13 @@ class ControlBlock {
 
   removeControlBlock() {
     clearBlockArray(this.blockArray);
+  }
+}
+
+class ControlBlockType {
+  constructor(blockType, blockColor) {
+    this.blockType = blockType;
+    this.blockColor = blockColor;
   }
 }
 

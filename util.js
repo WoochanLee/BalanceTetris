@@ -11,3 +11,18 @@ function logBlockArray(blockArray) {
     console.log(line);
   }
 }
+
+class Queue {
+  constructor() {
+    this._arr = [];
+  }
+  enqueue(item) {
+    this._arr.push(item);
+  }
+  dequeue() {
+    return this._arr.shift();
+  }
+  get(i) {
+    return this._arr[i];
+  }
+}
