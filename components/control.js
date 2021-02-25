@@ -27,6 +27,10 @@ function handleKeyboardEvent(e) {
     case "Space":
       gameScreen.onEventSpace();
       break;
+
+    case "ShiftLeft":
+      gameScreen.onEventShift();
+      break;
   }
   gameScreen.reDraw();
 }

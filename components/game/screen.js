@@ -21,6 +21,7 @@ class GameScreen {
 
     this.stackedBlock = new StakedBlock();
     this.controlBlock = new ControlBlock();
+    this.shiftBlock = new ShiftBlock();
     this.previewBlockManager = new PreviewBlockManager();
     this.isSpaceDownRunning = false;
   }
@@ -29,6 +30,7 @@ class GameScreen {
     //logBlockArray(this.controlBlock.blockArray);
     this.drawTetrisBlocks();
     this.drawNextBlocks();
+    this.drawShiftBlock();
   }
 
   drawTetrisBlocks() {
@@ -61,6 +63,10 @@ class GameScreen {
     this.previewBlockManager.draw(this.ctx);
   }
 
+  drawShiftBlock() {
+    this.shiftBlock.draw(this.ctx);
+  }
+
   flowGravity() {
     let collisionCheckTmpArray = copyBlockArray(this.controlBlock.blockArray);
     if (
@@ -71,6 +77,7 @@ class GameScreen {
     ) {
       moveToBottomOneLine(this.controlBlock.blockArray);
     } else {
+      this.shiftBlock.isAlreadyShiftedThisTime = false;
       this.isSpaceDownRunning = false;
       this.addBlocksToStackedArray(
         this.controlBlock.blockArray,
@@ -128,6 +135,29 @@ class GameScreen {
     }
   }
 
+  shiftControlBlock() {
+    if (this.shiftBlock.isAlreadyShiftedThisTime) {
+      return;
+    }
+
+    this.shiftBlock.isAlreadyShiftedThisTime = true;
+
+    if (this.shiftBlock.isShiftedBlockEmpty()) {
+      this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
+      this.controlBlock.addNewControlBlock();
+    } else {
+      let tmpBlockType = this.shiftBlock.shiftedBlock;
+      this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
+      this.changeControlBlock(tmpBlockType);
+    }
+
+    this.reDraw();
+  }
+
+  changeControlBlock(controlBlockType) {
+    this.controlBlock.changeContorlBlock(controlBlockType);
+  }
+
   checkIsGameOver(stackedBlocks) {
     for (let x = 0; x < widthBlockCount; x++) {
       if (stackedBlocks[x][1].isExist) {
@@ -182,5 +212,9 @@ class GameScreen {
     while (this.isSpaceDownRunning) {
       this.flowGravity();
     }
+  }
+
+  onEventShift() {
+    this.shiftControlBlock();
   }
 }

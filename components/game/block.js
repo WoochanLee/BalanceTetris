@@ -141,12 +141,21 @@ class ControlBlock {
     }
   }
 
+  changeContorlBlock(controlBlockType) {
+    this.controlBlockType = controlBlockType;
+    this.refreshBlockArray();
+  }
+
   addNewControlBlock() {
-    this.currentRotateDirection = 0;
     this.controlBlockType = this.previewBlockQueue.dequeue();
     this.previewBlockQueue.enqueue(
       new ControlBlockType(this.makeRandomType(), this.makeRandomColor())
     );
+    this.refreshBlockArray();
+  }
+
+  refreshBlockArray() {
+    this.currentRotateDirection = 0;
     clearBlockArray(this.blockArray);
 
     let shape = this.controlBlockType.blockType.shape;
