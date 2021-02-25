@@ -1,14 +1,13 @@
 const previewBackgroundColor = "#444444";
-const previewBlockColor = "#828282";
 
 /**
  * preview block setting
  */
 const previewBlockLocation = [
-  [450, 50],
-  [450, 150],
-  [450, 250],
-  [450, 350],
+  [430, 50],
+  [430, 150],
+  [430, 250],
+  [430, 350],
 ];
 
 const justPreviewBlockRadius = 45;
@@ -56,7 +55,6 @@ class PreviewBlock {
 
   setBlockType(controlBlockType) {
     this.blockType = controlBlockType.blockType;
-    this.blockColor = controlBlockType.blockColor;
 
     let widthBlockCount = this.blockType.widthBlockCount;
     let widthBlockMarginCount = this.blockType.widthBlockMarginCount;
@@ -93,9 +91,7 @@ class PreviewBlock {
   }
 
   drawPreviewBlock(ctx) {
-    ctx.fillStyle = previewBlockColor;
-
-    ctx.fillStyle = this.blockColor;
+    ctx.fillStyle = this.blockType.blockColor;
     for (let i = 0; i < this.blockType.shape.length; i++) {
       let blockX = this.blockType.shape[i][0];
       let blockY = this.blockType.shape[i][1];

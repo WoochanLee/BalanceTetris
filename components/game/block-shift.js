@@ -1,5 +1,4 @@
-const shiftBackgroundColor = "#55aa55";
-const shiftBlockColor = "#828282";
+const shiftBackgroundColor = "#444444";
 
 /**
  * shift block setting
@@ -32,7 +31,6 @@ class ShiftBlock {
 
   refreshData() {
     this.blockType = this.shiftedBlock.blockType;
-    this.blockColor = this.shiftedBlock.blockColor;
 
     let widthBlockCount = this.blockType.widthBlockCount;
     let widthBlockMarginCount = this.blockType.widthBlockMarginCount;
@@ -78,9 +76,7 @@ class ShiftBlock {
   }
 
   drawShiftBlock(ctx) {
-    ctx.fillStyle = shiftBlockColor;
-
-    ctx.fillStyle = this.blockColor;
+    ctx.fillStyle = this.blockType.blockColor;
     for (let i = 0; i < this.blockType.shape.length; i++) {
       let blockX = this.blockType.shape[i][0];
       let blockY = this.blockType.shape[i][1];

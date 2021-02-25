@@ -7,6 +7,7 @@ class BlockTypeOne {
     this.widthBlockMarginCount = 0;
     this.heightBlockCount = 1;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#8CD6F3";
     this.shape = [
       [0, 1],
       [1, 1],
@@ -40,6 +41,7 @@ class BlockTypeTwo {
     this.widthBlockMarginCount = 1;
     this.heightBlockCount = 2;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#BC48A9";
     this.shape = [
       [1, 1],
       [2, 1],
@@ -85,6 +87,7 @@ class BlockTypeThree {
     this.widthBlockMarginCount = 1;
     this.heightBlockCount = 2;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#EFC23C";
     this.shape = [
       [1, 1],
       [1, 2],
@@ -105,6 +108,7 @@ class BlockTypeFour {
     this.widthBlockMarginCount = 1;
     this.heightBlockCount = 2;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#CF3656";
     this.shape = [
       [1, 1],
       [2, 1],
@@ -137,6 +141,7 @@ class BlockTypeFive {
     this.widthBlockMarginCount = 1;
     this.heightBlockCount = 2;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#96D038";
     this.shape = [
       [1, 2],
       [2, 1],
@@ -170,6 +175,7 @@ class BlockTypeSix {
     this.widthBlockMarginCount = 1;
     this.heightBlockCount = 2;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#DD7E30";
     this.shape = [
       [1, 2],
       [2, 2],
@@ -215,6 +221,7 @@ class BlockTypeSeven {
     this.widthBlockMarginCount = 1;
     this.heightBlockCount = 2;
     this.heightBlockMarginCount = 1;
+    this.blockColor = "#4E60E8";
     this.shape = [
       [1, 1],
       [1, 2],

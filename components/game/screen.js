@@ -7,7 +7,7 @@ const leftMargin = 100;
 /**
  * block UI setting
  */
-const borderWidth = 5;
+const borderWidth = 3;
 const blockSize = 25;
 const widthBlockCount = 10;
 const widthBlockPaddingCount = 3;
@@ -40,7 +40,7 @@ class GameScreen {
         if (stackedSingleBlock.isExist) {
           this.ctx.fillStyle = stackedSingleBlock.blockColor;
         } else {
-          this.ctx.fillStyle = "#828282";
+          this.ctx.fillStyle = "#37393A";
         }
 
         let controlSingleBlock = this.controlBlock.blockArray[x][y];

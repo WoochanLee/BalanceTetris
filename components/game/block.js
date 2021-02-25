@@ -42,7 +42,7 @@ function getLotatedBlock(
     ) {
       tmpArray[rotatedX][rotatedY].isExist = true;
       tmpArray[rotatedX][rotatedY].blockColor =
-        controlBlock.controlBlockType.blockColor;
+        controlBlock.controlBlockType.blockType.blockColor;
     } else {
       return null;
     }
@@ -80,17 +80,14 @@ class ControlBlock {
   }
 
   initControlBlockType() {
-    this.controlBlockType = new ControlBlockType(
-      this.makeRandomType(),
-      this.makeRandomColor()
-    );
+    this.controlBlockType = new ControlBlockType(this.makeRandomType());
   }
 
   initPreviewBlocks() {
     this.previewBlockQueue = new Queue();
     for (let i = 0; i < previewBlockLocation.length; i++) {
       this.previewBlockQueue.enqueue(
-        new ControlBlockType(this.makeRandomType(), this.makeRandomColor())
+        new ControlBlockType(this.makeRandomType())
       );
     }
   }
@@ -116,31 +113,6 @@ class ControlBlock {
     }
   }
 
-  makeRandomColor() {
-    let randomNum = Math.floor(Math.random() * 7);
-
-    switch (randomNum) {
-      case 0:
-        return "#EEAFAF";
-      case 1:
-        return "#AFC4E7";
-      case 2:
-        return "#BAE7AF";
-      case 3:
-        return "#FFF77F";
-      case 4:
-        return "#FF7F7F";
-      case 5:
-        return "#FDC4F8";
-      case 6:
-        return "#CB9FFD";
-      case 7:
-        return "#A9E1ED";
-      case 8:
-        return "#F3CDA0";
-    }
-  }
-
   changeContorlBlock(controlBlockType) {
     this.controlBlockType = controlBlockType;
     this.refreshBlockArray();
@@ -148,9 +120,7 @@ class ControlBlock {
 
   addNewControlBlock() {
     this.controlBlockType = this.previewBlockQueue.dequeue();
-    this.previewBlockQueue.enqueue(
-      new ControlBlockType(this.makeRandomType(), this.makeRandomColor())
-    );
+    this.previewBlockQueue.enqueue(new ControlBlockType(this.makeRandomType()));
     this.refreshBlockArray();
   }
 
@@ -164,7 +134,7 @@ class ControlBlock {
         shape[i][1]
       ];
       block.isExist = true;
-      block.blockColor = this.controlBlockType.blockColor;
+      block.blockColor = this.controlBlockType.blockType.blockColor;
     }
   }
 
@@ -261,9 +231,8 @@ class ControlBlock {
 }
 
 class ControlBlockType {
-  constructor(blockType, blockColor) {
+  constructor(blockType) {
     this.blockType = blockType;
-    this.blockColor = blockColor;
   }
 }
 
