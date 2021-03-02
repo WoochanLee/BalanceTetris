@@ -24,10 +24,14 @@ class GameScreen {
     this.shiftBlock = new ShiftBlock();
     this.previewBlockManager = new PreviewBlockManager();
     this.isSpaceDownRunning = false;
+    this.init();
+  }
+
+  init() {
+    this.drawBlocks();
   }
 
   drawBlocks() {
-    //logBlockArray(this.controlBlock.blockArray);
     this.drawTetrisBlocks();
     this.drawNextBlocks();
     this.drawShiftBlock();

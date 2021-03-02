@@ -10,17 +10,17 @@ let gameOverText = document.getElementById("game-over");
 
 let isGameOver = false;
 
-function onClickTestButton() {
-  if (testButtonOn) {
-    clearInterval(timeId);
-  } else {
-    timeId = setInterval(
-      () => gameScreen.flowGravity(),
-      timePerLine * Math.pow(increaseSpeedPerDifficulty, currentDifficulty)
-    );
-  }
-  testButtonOn = !testButtonOn;
-}
+// function onClickTestButton() {
+//   if (testButtonOn) {
+//     clearInterval(timeId);
+//   } else {
+//     timeId = setInterval(
+//       () => gameScreen.flowGravity(),
+//       timePerLine * Math.pow(increaseSpeedPerDifficulty, currentDifficulty)
+//     );
+//   }
+//   testButtonOn = !testButtonOn;
+// }
 
 timeId = setInterval(
   () => gameScreen.flowGravity(),

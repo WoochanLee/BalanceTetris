@@ -15,7 +15,7 @@ function findBlockRefPoint(blockArray) {
   return refPoint;
 }
 
-function getLotatedBlock(
+function getRotatedBlock(
   rotationBlueprint,
   currentRotateDirection,
   controlBlock,
@@ -66,7 +66,9 @@ class ControlBlock {
     this.initBlockTypes();
     this.initPreviewBlocks();
     this.blockArray = new Array(widthBlockCount);
+    this.controlBlockCount = 0;
     initBlockArray(this.blockArray);
+    this.initControlBlockType();
   }
 
   initBlockTypes() {
@@ -80,37 +82,35 @@ class ControlBlock {
   }
 
   initControlBlockType() {
-    this.controlBlockType = new ControlBlockType(this.makeRandomType());
+    this.addNewControlBlock();
   }
 
   initPreviewBlocks() {
     this.previewBlockQueue = new Queue();
-    for (let i = 0; i < previewBlockLocation.length; i++) {
-      this.previewBlockQueue.enqueue(
-        new ControlBlockType(this.makeRandomType())
-      );
+
+    for (let i = 0; i < 2; i++) {
+      this.enqueueRandomTypePack();
     }
   }
 
-  makeRandomType() {
-    let randomNum = Math.floor(Math.random() * 7);
+  enqueueRandomTypePack() {
+    let array = this.makeRandomTypePack();
 
-    switch (randomNum) {
-      case 0:
-        return this.blockTypeOne;
-      case 1:
-        return this.blockTypeTwo;
-      case 2:
-        return this.blockTypeThree;
-      case 3:
-        return this.blockTypeFour;
-      case 4:
-        return this.blockTypeFive;
-      case 5:
-        return this.blockTypeSix;
-      case 6:
-        return this.blockTypeSeven;
+    for (let i = 0; i < array.length; i++) {
+      this.previewBlockQueue.enqueue(new ControlBlockType(array[i]));
     }
+  }
+
+  makeRandomTypePack() {
+    return shuffleArray([
+      this.blockTypeOne,
+      this.blockTypeTwo,
+      this.blockTypeThree,
+      this.blockTypeFour,
+      this.blockTypeFive,
+      this.blockTypeSix,
+      this.blockTypeSeven,
+    ]);
   }
 
   changeContorlBlock(controlBlockType) {
@@ -119,8 +119,11 @@ class ControlBlock {
   }
 
   addNewControlBlock() {
+    this.controlBlockCount++;
     this.controlBlockType = this.previewBlockQueue.dequeue();
-    this.previewBlockQueue.enqueue(new ControlBlockType(this.makeRandomType()));
+    if (this.controlBlockCount % 7 == 0) {
+      this.enqueueRandomTypePack();
+    }
     this.refreshBlockArray();
   }
 
@@ -144,7 +147,7 @@ class ControlBlock {
     stackedBlockArray,
     allowableRange
   ) {
-    let rotatedBlockArray = getLotatedBlock(
+    let rotatedBlockArray = getRotatedBlock(
       this.controlBlockType.blockType.rotationBlueprint,
       this.currentRotateDirection,
       controlBlock,
