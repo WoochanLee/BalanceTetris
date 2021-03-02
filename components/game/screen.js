@@ -1,17 +1,20 @@
 /**
  * canvas setting
  */
-const topMargin = -30;
-const leftMargin = 100;
+const topMargin = -20;
+const leftMargin = 120;
 
 /**
  * block UI setting
  */
-const borderWidth = 3;
+const borderWidth = 1;
 const blockSize = 25;
 const widthBlockCount = 10;
 const widthBlockPaddingCount = 3;
 const heightBlockCount = 25;
+const hideTopLine = 1;
+const shadowWidth = 3;
+const blockShadowOpacity = "cc";
 
 class GameScreen {
   constructor() {
@@ -39,23 +42,42 @@ class GameScreen {
 
   drawTetrisBlocks() {
     for (let x = 0; x < widthBlockCount; x++) {
-      for (let y = 0; y < heightBlockCount; y++) {
+      for (let y = hideTopLine; y < heightBlockCount; y++) {
+        let blockColor;
         let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
         if (stackedSingleBlock.isExist) {
-          this.ctx.fillStyle = stackedSingleBlock.blockColor;
+          blockColor = stackedSingleBlock.blockColor;
         } else {
-          this.ctx.fillStyle = "#37393A";
+          blockColor = "#37393A";
         }
 
         let controlSingleBlock = this.controlBlock.blockArray[x][y];
         if (controlSingleBlock.isExist) {
-          this.ctx.fillStyle = controlSingleBlock.blockColor;
+          blockColor = controlSingleBlock.blockColor;
         }
+
+        this.ctx.fillStyle = blockColor + blockShadowOpacity;
 
         this.ctx.fillRect(
           borderWidth * x + blockSize * x + leftMargin,
           borderWidth * y + blockSize * y + topMargin,
           blockSize,
+          blockSize
+        );
+
+        //draw shadow
+        this.ctx.fillStyle = blockColor;
+        this.ctx.fillRect(
+          borderWidth * x + blockSize * x + leftMargin,
+          borderWidth * y + blockSize * y + topMargin,
+          blockSize,
+          shadowWidth
+        );
+
+        this.ctx.fillRect(
+          borderWidth * x + blockSize * x + leftMargin,
+          borderWidth * y + blockSize * y + topMargin,
+          shadowWidth,
           blockSize
         );
       }

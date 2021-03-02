@@ -4,10 +4,10 @@ const previewBackgroundColor = "#444444";
  * preview block setting
  */
 const previewBlockLocation = [
-  [430, 50],
-  [430, 150],
-  [430, 250],
-  [430, 350],
+  [450, 50],
+  [450, 140],
+  [450, 210],
+  [450, 280],
 ];
 
 const justPreviewBlockRadius = 45;
@@ -49,8 +49,9 @@ class PreviewBlock {
     this.locationX = locationX;
     this.locationY = locationY;
     this.radius = radius;
-    this.previewBorderWidth = radius / 15;
+    this.previewBorderWidth = radius / 45;
     this.previewBlockSize = (radius * 4) / 15;
+    this.previewBlockShadowWidth = radius / 15;
   }
 
   setBlockType(controlBlockType) {
@@ -91,8 +92,10 @@ class PreviewBlock {
   }
 
   drawPreviewBlock(ctx) {
-    ctx.fillStyle = this.blockType.blockColor;
     for (let i = 0; i < this.blockType.shape.length; i++) {
+      let blockColor = this.blockType.blockColor;
+      ctx.fillStyle = blockColor + blockShadowOpacity;
+
       let blockX = this.blockType.shape[i][0];
       let blockY = this.blockType.shape[i][1];
 
@@ -115,6 +118,22 @@ class PreviewBlock {
         blockLocationY,
         this.previewBlockSize,
         this.previewBlockSize
+      );
+
+      ctx.fillStyle = blockColor;
+
+      ctx.fillRect(
+        blockLocationX,
+        blockLocationY,
+        this.previewBlockShadowWidth,
+        this.previewBlockSize
+      );
+
+      ctx.fillRect(
+        blockLocationX,
+        blockLocationY,
+        this.previewBlockSize,
+        this.previewBlockShadowWidth
       );
     }
   }

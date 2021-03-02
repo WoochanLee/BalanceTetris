@@ -29,7 +29,7 @@ timeId = setInterval(
 
 function levelUp() {
   currentDifficulty++;
-  levelText.textContent = `speed : ${currentDifficulty}`;
+  levelText.textContent = `${currentDifficulty}`;
   clearInterval(timeId);
   timeId = setInterval(
     () => gameScreen.flowGravity(),
@@ -39,7 +39,7 @@ function levelUp() {
 function addScore(removedLineCount) {
   if (removedLineCount > 0) {
     score += removedLineCount * removedLineCount;
-    scoreText.textContent = `score : ${score}`;
+    scoreText.textContent = `${score}`;
   }
 }
 

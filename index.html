@@ -3,54 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/screen.css" />
     <title>Document</title>
     <style>
-      body {
-        display: flex;
-        justify-content: center;
-      }
-      .main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      canvas {
-        width: 480;
-        height: 680px;
-        border: 1px solid black;
-      }
-
-      h1 {
-        margin-bottom: -20px;
-      }
-
-      .board {
-        display: flex;
-      }
-
-      #level {
-        margin-right: 10px;
-      }
-
-      #game-over {
-        margin-top: -20px;
-        margin-bottom: 0px;
-        visibility: hidden;
-      }
+      
     </style>
   </head>
   <body>
     <div class="main">
       <!-- <button id="test" onclick="onClickTestButton();">스탑</button> -->
       <!-- <canvas id="canvas" width="295" height="745"></canvas> -->
-      <h1>BALANCE TETRIS</h1>
+      <!-- <h1>BALANCE TETRIS</h1> -->
+      <img class="logo__title" src="res/logo.png" />
       <div class="board">
-        <h4 id="level">speed : 0</h4>
-        <h4 id="score">score : 0</h4>
+        <div class="board__logo">
+          <img class="board__logo__speed" src="res/speed.png" />
+          <h2 id="level">0</h4>
+        </div>
+        <div class="board__logo">
+          <img class="board__logo__score" src="res/score.png" />
+          <h2 id="score">0</h4>
+        </div>
       </div>
       <h5 id="game-over">GAME OVER</h5>
-      <canvas id="canvas" width="480" height="680"></canvas>
+      <canvas id="canvas" width="500" height="680"></canvas>
     </div>
     <script type="text/javascript" src="util.js"></script>
     <script type="text/javascript" src="settings/config.js"></script>

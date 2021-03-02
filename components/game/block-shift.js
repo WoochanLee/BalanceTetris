@@ -10,8 +10,9 @@ const shiftBlockRadius = 45;
 
 class ShiftBlock {
   constructor() {
-    this.shiftBorderWidth = shiftBlockRadius / 15;
+    this.shiftBorderWidth = shiftBlockRadius / 45;
     this.shiftBlockSize = (shiftBlockRadius * 4) / 15;
+    this.shiftBlockShadowWidth = shiftBlockRadius / 15;
     this.shiftedBlock = null;
     this.isAlreadyShiftedThisTime = false;
   }
@@ -76,8 +77,10 @@ class ShiftBlock {
   }
 
   drawShiftBlock(ctx) {
-    ctx.fillStyle = this.blockType.blockColor;
     for (let i = 0; i < this.blockType.shape.length; i++) {
+      let blockColor = this.blockType.blockColor;
+      ctx.fillStyle = blockColor + blockShadowOpacity;
+
       let blockX = this.blockType.shape[i][0];
       let blockY = this.blockType.shape[i][1];
 
@@ -100,6 +103,22 @@ class ShiftBlock {
         blockLocationY,
         this.shiftBlockSize,
         this.shiftBlockSize
+      );
+
+      ctx.fillStyle = blockColor;
+
+      ctx.fillRect(
+        blockLocationX,
+        blockLocationY,
+        this.shiftBlockShadowWidth,
+        this.shiftBlockSize
+      );
+
+      ctx.fillRect(
+        blockLocationX,
+        blockLocationY,
+        this.shiftBlockSize,
+        this.shiftBlockShadowWidth
       );
     }
   }
