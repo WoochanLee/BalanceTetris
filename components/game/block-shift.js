@@ -105,8 +105,8 @@ class ShiftBlock {
         this.shiftBlockSize
       );
 
+      //draw shadow
       ctx.fillStyle = blockColor;
-
       ctx.fillRect(
         blockLocationX,
         blockLocationY,

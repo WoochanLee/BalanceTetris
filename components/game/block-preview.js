@@ -120,8 +120,8 @@ class PreviewBlock {
         this.previewBlockSize
       );
 
+      //draw shadow
       ctx.fillStyle = blockColor;
-
       ctx.fillRect(
         blockLocationX,
         blockLocationY,
