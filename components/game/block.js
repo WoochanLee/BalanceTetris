@@ -17,9 +17,11 @@ function findBlockRefPoint(blockArray) {
 
 function getRotatedBlock(
   rotationBlueprint,
-  currentRotateDirection,
+  reverseRotationBlueprint,
+  newRotateDirection,
   controlBlock,
-  controlBlockArray
+  controlBlockArray,
+  isForwardRotation
 ) {
   let tmpArray = copyBlockArray(controlBlockArray);
   let refPoint = findBlockRefPoint(tmpArray);
@@ -29,7 +31,13 @@ function getRotatedBlock(
     return null;
   }
 
-  let r = rotationBlueprint[currentRotateDirection];
+  let r;
+  if (isForwardRotation) {
+    r = rotationBlueprint[newRotateDirection];
+  } else {
+    r = reverseRotationBlueprint[newRotateDirection];
+  }
+
   for (let i = 0; i < r.length; i++) {
     let rotatedX = refPoint.x + r[i][0];
     let rotatedY = refPoint.y + r[i][1];
@@ -57,6 +65,15 @@ function getNextRotateDirection(currentRotateDirection, rotationAmount) {
     return nextRotationDirection;
   } else {
     return 0;
+  }
+}
+
+function getPrevRotateDirection(currentRotateDirection, rotationAmount) {
+  let prevRotationDirection = currentRotateDirection - 1;
+  if (prevRotationDirection < 0) {
+    return rotationAmount - 1;
+  } else {
+    return prevRotationDirection;
   }
 }
 
@@ -145,13 +162,30 @@ class ControlBlock {
     controlBlock,
     controlBlockArray,
     stackedBlockArray,
-    allowableRange
+    allowableRange,
+    isForwardRotation
   ) {
+    let newRotateDirection;
+
+    if (isForwardRotation) {
+      newRotateDirection = getNextRotateDirection(
+        this.currentRotateDirection,
+        this.controlBlockType.blockType.rotationBlueprint.length
+      );
+    } else {
+      newRotateDirection = getPrevRotateDirection(
+        this.currentRotateDirection,
+        this.controlBlockType.blockType.rotationBlueprint.length
+      );
+    }
+
     let rotatedBlockArray = getRotatedBlock(
       this.controlBlockType.blockType.rotationBlueprint,
-      this.currentRotateDirection,
+      this.controlBlockType.blockType.reverseRotationBlueprint,
+      newRotateDirection,
       controlBlock,
-      controlBlockArray
+      controlBlockArray,
+      isForwardRotation
     );
 
     if (rotatedBlockArray == null) {
@@ -179,10 +213,7 @@ class ControlBlock {
     }
 
     if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
-      this.currentRotateDirection = getNextRotateDirection(
-        this.currentRotateDirection,
-        this.controlBlockType.blockType.rotationBlueprint.length
-      );
+      this.currentRotateDirection = newRotateDirection;
       controlBlock.blockArray = rotatedBlockArray;
       return true;
     } else {
@@ -204,7 +235,8 @@ class ControlBlock {
         controlBlock,
         tmpArray,
         stackedBlockArray,
-        allowableRange - 1
+        allowableRange - 1,
+        true
       );
     }
   }
@@ -223,7 +255,8 @@ class ControlBlock {
         controlBlock,
         tmpArray,
         stackedBlockArray,
-        allowableRange - 1
+        allowableRange - 1,
+        true
       );
     }
   }

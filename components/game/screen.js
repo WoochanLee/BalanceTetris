@@ -229,7 +229,8 @@ class GameScreen {
       this.controlBlock,
       this.controlBlock.blockArray,
       this.stackedBlock.blockArray,
-      allowableRotationRange
+      allowableRotationRange,
+      true
     );
   }
 
@@ -242,5 +243,45 @@ class GameScreen {
 
   onEventShift() {
     this.shiftControlBlock();
+  }
+
+  onEventKeyQ() {
+    this.controlBlock.rotateBlock(
+      this.controlBlock,
+      this.controlBlock.blockArray,
+      this.stackedBlock.blockArray,
+      allowableRotationRange,
+      false
+    );
+  }
+
+  onEventKeyE() {
+    this.controlBlock.rotateBlock(
+      this.controlBlock,
+      this.controlBlock.blockArray,
+      this.stackedBlock.blockArray,
+      allowableRotationRange,
+      true
+    );
+  }
+
+  onEventKeyZ() {
+    this.controlBlock.rotateBlock(
+      this.controlBlock,
+      this.controlBlock.blockArray,
+      this.stackedBlock.blockArray,
+      allowableRotationRange,
+      false
+    );
+  }
+
+  onEventKeyC() {
+    this.controlBlock.rotateBlock(
+      this.controlBlock,
+      this.controlBlock.blockArray,
+      this.stackedBlock.blockArray,
+      allowableRotationRange,
+      true
+    );
   }
 }

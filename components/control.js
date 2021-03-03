@@ -31,6 +31,22 @@ function handleKeyboardEvent(e) {
     case "ShiftLeft":
       gameScreen.onEventShift();
       break;
+
+    case "KeyQ":
+      gameScreen.onEventKeyQ();
+      break;
+
+    case "KeyE":
+      gameScreen.onEventKeyE();
+      break;
+
+    case "KeyZ":
+      gameScreen.onEventKeyZ();
+      break;
+
+    case "KeyC":
+      gameScreen.onEventKeyC();
+      break;
   }
   gameScreen.reDraw();
 }
