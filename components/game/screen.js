@@ -14,6 +14,7 @@ const widthBlockPaddingCount = 3;
 const heightBlockCount = 25;
 const hideTopLine = 1;
 const shadowWidth = 3;
+const outBorderBlockCount = 3;
 const blockShadowOpacity = "cc";
 const blockShadowOpacity2 = "55";
 
@@ -255,7 +256,7 @@ class GameScreen {
   }
 
   onEventUpArrow() {
-    this.controlBlock.rotateBlock(
+    this.controlBlock.rotate(
       this.controlBlock,
       this.controlBlock.blockArray,
       this.stackedBlock.blockArray,
@@ -276,7 +277,7 @@ class GameScreen {
   }
 
   onEventKeyQ() {
-    this.controlBlock.rotateBlock(
+    this.controlBlock.rotate(
       this.controlBlock,
       this.controlBlock.blockArray,
       this.stackedBlock.blockArray,
@@ -286,7 +287,7 @@ class GameScreen {
   }
 
   onEventKeyE() {
-    this.controlBlock.rotateBlock(
+    this.controlBlock.rotate(
       this.controlBlock,
       this.controlBlock.blockArray,
       this.stackedBlock.blockArray,
@@ -296,7 +297,7 @@ class GameScreen {
   }
 
   onEventKeyZ() {
-    this.controlBlock.rotateBlock(
+    this.controlBlock.rotate(
       this.controlBlock,
       this.controlBlock.blockArray,
       this.stackedBlock.blockArray,
@@ -306,7 +307,7 @@ class GameScreen {
   }
 
   onEventKeyC() {
-    this.controlBlock.rotateBlock(
+    this.controlBlock.rotate(
       this.controlBlock,
       this.controlBlock.blockArray,
       this.stackedBlock.blockArray,

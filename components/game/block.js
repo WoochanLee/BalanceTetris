@@ -21,6 +21,7 @@ function getRotatedBlock(
   newRotateDirection,
   controlBlock,
   controlBlockArray,
+  stackedBlockArray,
   isForwardRotation
 ) {
   let tmpArray = copyBlockArray(controlBlockArray);
@@ -54,6 +55,10 @@ function getRotatedBlock(
     } else {
       return null;
     }
+  }
+
+  if (isOverlaped(tmpArray, stackedBlockArray)) {
+    return null;
   }
 
   return tmpArray;
@@ -158,12 +163,43 @@ class ControlBlock {
     }
   }
 
-  rotateBlock(
+  rotate(
     controlBlock,
     controlBlockArray,
     stackedBlockArray,
     allowableRange,
     isForwardRotation
+  ) {
+    let couldKickRotate = this.rotateBlock(
+      controlBlock,
+      controlBlockArray,
+      stackedBlockArray,
+      allowableRange,
+      isForwardRotation,
+      false
+    );
+
+    console.log(couldKickRotate);
+
+    if (!couldKickRotate) {
+      this.rotateBlock(
+        controlBlock,
+        controlBlockArray,
+        stackedBlockArray,
+        allowableRange,
+        isForwardRotation,
+        true
+      );
+    }
+  }
+
+  rotateBlock(
+    controlBlock,
+    controlBlockArray,
+    stackedBlockArray,
+    allowableRange,
+    isForwardRotation,
+    isSpin
   ) {
     let newRotateDirection;
 
@@ -179,56 +215,102 @@ class ControlBlock {
       );
     }
 
+    console.log("1");
+
     let rotatedBlockArray = getRotatedBlock(
       this.controlBlockType.blockType.rotationBlueprint,
       this.controlBlockType.blockType.reverseRotationBlueprint,
       newRotateDirection,
       controlBlock,
       controlBlockArray,
+      stackedBlockArray,
       isForwardRotation
     );
 
+    console.log("2");
+
     if (rotatedBlockArray == null) {
+      console.log("3");
       if (allowableRange > 0) {
-        let couldLeftRotate = this.checkLeftMoveRotation(
+        let couldLeftMoveRotate;
+        let couldRightMoveRotate;
+
+        couldLeftMoveRotate = this.checkLeftMoveRotation(
           controlBlock,
           controlBlockArray,
           stackedBlockArray,
-          allowableRange
+          allowableRange,
+          isForwardRotation,
+          isSpin
         );
 
-        if (couldLeftRotate) {
+        if (couldLeftMoveRotate) {
+          console.log("4");
           return true;
         } else {
-          return this.checkRightMoveRotation(
+          couldRightMoveRotate = this.checkRightMoveRotation(
             controlBlock,
             controlBlockArray,
             stackedBlockArray,
-            allowableRange
+            allowableRange,
+            isForwardRotation,
+            isSpin
           );
         }
+
+        console.log("5");
+
+        if (isSpin) {
+          if (couldRightMoveRotate) {
+            console.log("6");
+            return true;
+          } else {
+            console.log("7");
+            return this.checkBottomMoveRotation(
+              controlBlock,
+              controlBlockArray,
+              stackedBlockArray,
+              allowableRange,
+              isForwardRotation,
+              isSpin
+            );
+          }
+        } else {
+          console.log("8");
+          return couldRightMoveRotate;
+        }
       } else {
+        console.log("9");
         return false;
       }
     }
 
-    if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
-      this.currentRotateDirection = newRotateDirection;
-      controlBlock.blockArray = rotatedBlockArray;
-      return true;
-    } else {
-      return false;
-    }
+    this.currentRotateDirection = newRotateDirection;
+    controlBlock.blockArray = rotatedBlockArray;
+
+    console.log("10");
+
+    return true;
+
+    // if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
+    //   this.currentRotateDirection = newRotateDirection;
+    //   controlBlock.blockArray = rotatedBlockArray;
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   checkLeftMoveRotation(
     controlBlock,
     controlBlockArray,
     stackedBlockArray,
-    allowableRange
+    allowableRange,
+    isForwardRotation,
+    isSpin
   ) {
     let tmpArray = copyBlockArray(controlBlockArray);
-    if (couldBlockMoveToLeft(tmpArray, stackedBlockArray)) {
+    if (!isBlockReachedToLeftBorder(tmpArray)) {
       moveToLeftOneLine(tmpArray);
 
       return this.rotateBlock(
@@ -236,8 +318,11 @@ class ControlBlock {
         tmpArray,
         stackedBlockArray,
         allowableRange - 1,
-        true
+        isForwardRotation,
+        isSpin
       );
+    } else {
+      return false;
     }
   }
 
@@ -245,10 +330,12 @@ class ControlBlock {
     controlBlock,
     controlBlockArray,
     stackedBlockArray,
-    allowableRange
+    allowableRange,
+    isForwardRotation,
+    isSpin
   ) {
     let tmpArray = copyBlockArray(controlBlockArray);
-    if (couldBlockMoveToRight(tmpArray, stackedBlockArray)) {
+    if (!isBlockReachedToRightBorder(tmpArray)) {
       moveToRightOneLine(tmpArray);
 
       return this.rotateBlock(
@@ -256,8 +343,36 @@ class ControlBlock {
         tmpArray,
         stackedBlockArray,
         allowableRange - 1,
-        true
+        isForwardRotation,
+        isSpin
       );
+    } else {
+      return false;
+    }
+  }
+
+  checkBottomMoveRotation(
+    controlBlock,
+    controlBlockArray,
+    stackedBlockArray,
+    allowableRange,
+    isForwardRotation,
+    isSpin
+  ) {
+    let tmpArray = copyBlockArray(controlBlockArray);
+    if (!isBlockReachedToBottomBorder(tmpArray)) {
+      moveToBottomOneLine(tmpArray);
+
+      return this.rotateBlock(
+        controlBlock,
+        tmpArray,
+        stackedBlockArray,
+        allowableRange - 1,
+        isForwardRotation,
+        isSpin
+      );
+    } else {
+      return false;
     }
   }
 
