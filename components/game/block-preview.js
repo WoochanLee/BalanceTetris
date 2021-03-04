@@ -4,10 +4,10 @@ const previewBackgroundColor = "#444444";
  * preview block setting
  */
 const previewBlockLocation = [
-  [450, 50],
-  [450, 140],
-  [450, 210],
-  [450, 280],
+  [440, 50],
+  [440, 140],
+  [440, 210],
+  [440, 280],
 ];
 
 const justPreviewBlockRadius = 45;

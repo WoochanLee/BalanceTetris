@@ -7,7 +7,7 @@ const leftMargin = 120;
 /**
  * block UI setting
  */
-const borderWidth = 1;
+const borderWidth = 0;
 const blockSize = 25;
 const widthBlockCount = 10;
 const widthBlockPaddingCount = 3;
@@ -15,6 +15,7 @@ const heightBlockCount = 25;
 const hideTopLine = 1;
 const shadowWidth = 3;
 const blockShadowOpacity = "cc";
+const blockShadowOpacity2 = "55";
 
 class GameScreen {
   constructor() {
@@ -31,7 +32,7 @@ class GameScreen {
   }
 
   init() {
-    this.drawBlocks();
+    this.flowGravity();
   }
 
   drawBlocks() {
@@ -65,8 +66,8 @@ class GameScreen {
           blockSize
         );
 
-        //draw shadow
-        this.ctx.fillStyle = blockColor;
+        //draw top left shadow
+        this.ctx.fillStyle = blockColor + blockShadowOpacity2;
         this.ctx.fillRect(
           borderWidth * x + blockSize * x + leftMargin,
           borderWidth * y + blockSize * y + topMargin,
@@ -80,6 +81,32 @@ class GameScreen {
           shadowWidth,
           blockSize
         );
+
+        //draw bottom right shadow
+        if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
+          this.ctx.fillStyle = blockColor;
+          this.ctx.fillRect(
+            borderWidth * x + blockSize * x + leftMargin,
+            borderWidth * y +
+              blockSize * y +
+              topMargin +
+              blockSize -
+              shadowWidth,
+            blockSize,
+            shadowWidth
+          );
+
+          this.ctx.fillRect(
+            borderWidth * x +
+              blockSize * x +
+              leftMargin +
+              blockSize -
+              shadowWidth,
+            borderWidth * y + blockSize * y + topMargin,
+            shadowWidth,
+            blockSize
+          );
+        }
       }
     }
   }
@@ -118,6 +145,7 @@ class GameScreen {
       } else {
         this.controlBlock.addNewControlBlock();
         levelUp();
+        this.flowGravity();
       }
     }
 

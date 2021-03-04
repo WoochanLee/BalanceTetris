@@ -54,7 +54,7 @@ h1 {
   width: 150px;
   height: 160px;
   left: 100px;
-  top: 470px;
+  top: 450px;
 }
 
 .screen > :last-child {
@@ -62,7 +62,7 @@ h1 {
   width: 150px;
   height: 160px;
   right: 120px;
-  top: 470px;
+  top: 450px;
 }
 
 #level {
