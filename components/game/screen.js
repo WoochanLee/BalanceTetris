@@ -29,6 +29,7 @@ class GameScreen {
     this.shiftBlock = new ShiftBlock();
     this.previewBlockManager = new PreviewBlockManager();
     this.isSpaceDownRunning = false;
+    this.collisionDelay = 0;
     this.init();
   }
 
@@ -43,12 +44,12 @@ class GameScreen {
   }
 
   drawTetrisBlocks() {
-    for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
-      for (
-        let y = hideTopLine;
-        y < heightBlockCount + outBorderBlockCount;
-        y++
-      ) {
+    for (
+      let x = outBorderBlockCount;
+      x < widthBlockCount + outBorderBlockCount;
+      x++
+    ) {
+      for (let y = hideTopLine; y < heightBlockCount; y++) {
         let blockColor;
         let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
         if (stackedSingleBlock.isExist) {
@@ -65,7 +66,9 @@ class GameScreen {
         this.ctx.fillStyle = blockColor + blockShadowOpacity;
 
         this.ctx.fillRect(
-          borderWidth * x + blockSize * x + leftMargin,
+          borderWidth * (x - outBorderBlockCount) +
+            blockSize * (x - outBorderBlockCount) +
+            leftMargin,
           borderWidth * y + blockSize * y + topMargin,
           blockSize,
           blockSize
@@ -74,14 +77,18 @@ class GameScreen {
         //draw top left shadow
         this.ctx.fillStyle = blockColor + blockShadowOpacity2;
         this.ctx.fillRect(
-          borderWidth * x + blockSize * x + leftMargin,
+          borderWidth * (x - outBorderBlockCount) +
+            blockSize * (x - outBorderBlockCount) +
+            leftMargin,
           borderWidth * y + blockSize * y + topMargin,
           blockSize,
           shadowWidth
         );
 
         this.ctx.fillRect(
-          borderWidth * x + blockSize * x + leftMargin,
+          borderWidth * (x - outBorderBlockCount) +
+            blockSize * (x - outBorderBlockCount) +
+            leftMargin,
           borderWidth * y + blockSize * y + topMargin,
           shadowWidth,
           blockSize
@@ -91,7 +98,9 @@ class GameScreen {
         if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
           this.ctx.fillStyle = blockColor;
           this.ctx.fillRect(
-            borderWidth * x + blockSize * x + leftMargin,
+            borderWidth * (x - outBorderBlockCount) +
+              blockSize * (x - outBorderBlockCount) +
+              leftMargin,
             borderWidth * y +
               blockSize * y +
               topMargin +
@@ -102,8 +111,8 @@ class GameScreen {
           );
 
           this.ctx.fillRect(
-            borderWidth * x +
-              blockSize * x +
+            borderWidth * (x - outBorderBlockCount) +
+              blockSize * (x - outBorderBlockCount) +
               leftMargin +
               blockSize -
               shadowWidth,
@@ -135,9 +144,12 @@ class GameScreen {
     ) {
       moveToBottomOneLine(this.controlBlock.blockArray);
       rewindTimer();
+    } else if (this.collisionDelay < collisionDelayCount) {
+      this.collisionDelay++;
     } else {
       this.shiftBlock.isAlreadyShiftedThisTime = false;
       this.isSpaceDownRunning = false;
+      this.collisionDelay = 0;
       this.addBlocksToStackedArray(
         this.controlBlock.blockArray,
         this.stackedBlock.blockArray

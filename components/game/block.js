@@ -21,7 +21,6 @@ function getRotatedBlock(
   newRotateDirection,
   controlBlock,
   controlBlockArray,
-  stackedBlockArray,
   isForwardRotation
 ) {
   let tmpArray = copyBlockArray(controlBlockArray);
@@ -57,11 +56,27 @@ function getRotatedBlock(
     }
   }
 
-  if (isOverlaped(tmpArray, stackedBlockArray)) {
-    return null;
+  return tmpArray;
+}
+
+function isInBorder(blockArray) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+      if (
+        blockArray[x][y].isExist == true &&
+        !(
+          x >= outBorderBlockCount &&
+          x < widthBlockCount + outBorderBlockCount &&
+          y >= 0 &&
+          y < heightBlockCount
+        )
+      ) {
+        return false;
+      }
+    }
   }
 
-  return tmpArray;
+  return true;
 }
 
 function getNextRotateDirection(currentRotateDirection, rotationAmount) {
@@ -155,9 +170,9 @@ class ControlBlock {
 
     let shape = this.controlBlockType.blockType.shape;
     for (let i = 0; i < shape.length; i++) {
-      let block = this.blockArray[shape[i][0] + widthBlockPaddingCount][
-        shape[i][1]
-      ];
+      let block = this.blockArray[
+        shape[i][0] + widthBlockPaddingCount + outBorderBlockCount
+      ][shape[i][1]];
       block.isExist = true;
       block.blockColor = this.controlBlockType.blockType.blockColor;
     }
@@ -170,37 +185,6 @@ class ControlBlock {
     allowableRange,
     isForwardRotation
   ) {
-    let couldKickRotate = this.rotateBlock(
-      controlBlock,
-      controlBlockArray,
-      stackedBlockArray,
-      allowableRange,
-      isForwardRotation,
-      false
-    );
-
-    console.log(couldKickRotate);
-
-    if (!couldKickRotate) {
-      this.rotateBlock(
-        controlBlock,
-        controlBlockArray,
-        stackedBlockArray,
-        allowableRange,
-        isForwardRotation,
-        true
-      );
-    }
-  }
-
-  rotateBlock(
-    controlBlock,
-    controlBlockArray,
-    stackedBlockArray,
-    allowableRange,
-    isForwardRotation,
-    isSpin
-  ) {
     let newRotateDirection;
 
     if (isForwardRotation) {
@@ -211,11 +195,9 @@ class ControlBlock {
     } else {
       newRotateDirection = getPrevRotateDirection(
         this.currentRotateDirection,
-        this.controlBlockType.blockType.rotationBlueprint.length
+        this.controlBlockType.blockType.reverseRotationBlueprint.length
       );
     }
-
-    console.log("1");
 
     let rotatedBlockArray = getRotatedBlock(
       this.controlBlockType.blockType.rotationBlueprint,
@@ -223,64 +205,125 @@ class ControlBlock {
       newRotateDirection,
       controlBlock,
       controlBlockArray,
-      stackedBlockArray,
       isForwardRotation
     );
 
-    console.log("2");
-
     if (rotatedBlockArray == null) {
-      console.log("3");
+      return;
+    }
+
+    let couldKickRotate = this.rotateBlock(
+      newRotateDirection,
+      controlBlock,
+      rotatedBlockArray,
+      stackedBlockArray,
+      allowableRange,
+      isForwardRotation,
+      false,
+      0,
+      0,
+      0
+    );
+
+    if (!couldKickRotate) {
+      this.rotateBlock(
+        newRotateDirection,
+        controlBlock,
+        rotatedBlockArray,
+        stackedBlockArray,
+        allowableRange,
+        isForwardRotation,
+        true,
+        0,
+        0,
+        0
+      );
+    }
+  }
+
+  rotateBlock(
+    newRotateDirection,
+    controlBlock,
+    rotatedBlockArray,
+    stackedBlockArray,
+    allowableRange,
+    isForwardRotation,
+    isSpin,
+    moveLeftCount,
+    moveRightCount,
+    moveBottomCount
+  ) {
+    if (
+      !isInBorder(rotatedBlockArray) ||
+      isOverlaped(rotatedBlockArray, stackedBlockArray)
+    ) {
       if (allowableRange > 0) {
         let couldLeftMoveRotate;
         let couldRightMoveRotate;
 
-        couldLeftMoveRotate = this.checkLeftMoveRotation(
-          controlBlock,
-          controlBlockArray,
-          stackedBlockArray,
-          allowableRange,
-          isForwardRotation,
-          isSpin
-        );
-
-        if (couldLeftMoveRotate) {
-          console.log("4");
-          return true;
+        if (moveLeftCount >= allowableRotationRange - 1) {
+          couldLeftMoveRotate = false;
         } else {
-          couldRightMoveRotate = this.checkRightMoveRotation(
+          couldLeftMoveRotate = this.checkLeftMoveRotation(
+            newRotateDirection,
             controlBlock,
-            controlBlockArray,
+            rotatedBlockArray,
             stackedBlockArray,
             allowableRange,
             isForwardRotation,
-            isSpin
+            isSpin,
+            moveLeftCount,
+            moveRightCount,
+            moveBottomCount
           );
         }
 
-        console.log("5");
-
-        if (isSpin) {
-          if (couldRightMoveRotate) {
-            console.log("6");
-            return true;
+        if (couldLeftMoveRotate) {
+          return true;
+        } else {
+          if (moveRightCount >= allowableRotationRange - 1) {
+            couldRightMoveRotate = false;
           } else {
-            console.log("7");
-            return this.checkBottomMoveRotation(
+            couldRightMoveRotate = this.checkRightMoveRotation(
+              newRotateDirection,
               controlBlock,
-              controlBlockArray,
+              rotatedBlockArray,
               stackedBlockArray,
               allowableRange,
               isForwardRotation,
-              isSpin
+              isSpin,
+              moveLeftCount,
+              moveRightCount,
+              moveBottomCount
             );
           }
+        }
+
+        if (isSpin) {
+          if (couldRightMoveRotate) {
+            return true;
+          } else {
+            if (moveBottomCount >= allowableRotationRange - 1) {
+              return false;
+            } else {
+              return this.checkBottomMoveRotation(
+                newRotateDirection,
+                controlBlock,
+                rotatedBlockArray,
+                stackedBlockArray,
+                allowableRange,
+                isForwardRotation,
+                isSpin,
+                moveLeftCount,
+                moveRightCount,
+                moveBottomCount
+              );
+            }
+          }
         } else {
-          console.log("8");
           return couldRightMoveRotate;
         }
       } else {
-        console.log("9");
         return false;
       }
     }
@@ -288,92 +331,106 @@ class ControlBlock {
     this.currentRotateDirection = newRotateDirection;
     controlBlock.blockArray = rotatedBlockArray;
 
-    console.log("10");
-
     return true;
-
-    // if (!isOverlaped(rotatedBlockArray, stackedBlockArray)) {
-    //   this.currentRotateDirection = newRotateDirection;
-    //   controlBlock.blockArray = rotatedBlockArray;
-    //   return true;
-    // } else {
-    //   return false;
-    // }
   }
 
   checkLeftMoveRotation(
+    newRotateDirection,
     controlBlock,
-    controlBlockArray,
+    rotatedBlockArray,
     stackedBlockArray,
     allowableRange,
     isForwardRotation,
-    isSpin
+    isSpin,
+    moveLeftCount,
+    moveRightCount,
+    moveBottomCount
   ) {
-    let tmpArray = copyBlockArray(controlBlockArray);
-    //if (!isBlockReachedToLeftBorder(tmpArray)) {
-    moveToLeftOneLine(tmpArray);
+    let tmpArray = copyBlockArray(rotatedBlockArray);
+    if (!isBlockReachedToLeftBorder(tmpArray)) {
+      moveToLeftOneLine(tmpArray);
 
-    return this.rotateBlock(
-      controlBlock,
-      tmpArray,
-      stackedBlockArray,
-      allowableRange - 1,
-      isForwardRotation,
-      isSpin
-    );
-    // } else {
-    //   return false;
-    // }
+      return this.rotateBlock(
+        newRotateDirection,
+        controlBlock,
+        tmpArray,
+        stackedBlockArray,
+        allowableRange - 1,
+        isForwardRotation,
+        isSpin,
+        moveLeftCount + 1,
+        moveRightCount,
+        moveBottomCount
+      );
+    } else {
+      return false;
+    }
   }
 
   checkRightMoveRotation(
+    newRotateDirection,
     controlBlock,
-    controlBlockArray,
+    rotatedBlockArray,
     stackedBlockArray,
     allowableRange,
     isForwardRotation,
-    isSpin
+    isSpin,
+    moveLeftCount,
+    moveRightCount,
+    moveBottomCount
   ) {
-    let tmpArray = copyBlockArray(controlBlockArray);
-    //if (!isBlockReachedToRightBorder(tmpArray)) {
-    moveToRightOneLine(tmpArray);
+    let tmpArray = copyBlockArray(rotatedBlockArray);
+    if (!isBlockReachedToRightBorder(tmpArray)) {
+      moveToRightOneLine(tmpArray);
 
-    return this.rotateBlock(
-      controlBlock,
-      tmpArray,
-      stackedBlockArray,
-      allowableRange - 1,
-      isForwardRotation,
-      isSpin
-    );
-    // } else {
-    //   return false;
-    // }
+      return this.rotateBlock(
+        newRotateDirection,
+        controlBlock,
+        tmpArray,
+        stackedBlockArray,
+        allowableRange - 1,
+        isForwardRotation,
+        isSpin,
+        moveLeftCount,
+        moveRightCount + 1,
+        moveBottomCount
+      );
+    } else {
+      return false;
+    }
   }
 
   checkBottomMoveRotation(
+    newRotateDirection,
     controlBlock,
-    controlBlockArray,
+    rotatedBlockArray,
     stackedBlockArray,
     allowableRange,
     isForwardRotation,
-    isSpin
+    isSpin,
+    moveLeftCount,
+    moveRightCount,
+    moveBottomCount
   ) {
-    let tmpArray = copyBlockArray(controlBlockArray);
-    //if (!isBlockReachedToBottomBorder(tmpArray)) {
-    moveToBottomOneLine(tmpArray);
+    let tmpArray = copyBlockArray(rotatedBlockArray);
+    if (!isBlockReachedToBottomBorder(tmpArray)) {
+      moveToBottomOneLine(tmpArray);
 
-    return this.rotateBlock(
-      controlBlock,
-      tmpArray,
-      stackedBlockArray,
-      allowableRange - 1,
-      isForwardRotation,
-      isSpin
-    );
-    // } else {
-    //   return false;
-    // }
+      return this.rotateBlock(
+        newRotateDirection,
+        controlBlock,
+        tmpArray,
+        stackedBlockArray,
+        allowableRange - 1,
+        isForwardRotation,
+        isSpin,
+        moveLeftCount,
+        moveRightCount,
+        moveBottomCount + 1
+      );
+    } else {
+      return false;
+    }
   }
 
   removeControlBlock() {
@@ -418,16 +475,18 @@ function moveToBottomOneLine(blockArray) {
 
 function moveToLeftOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
-    for (let x = 0; x < widthBlockCount + outBorderBlockCount - 1; x++) {
+    for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2 - 1; x++) {
       copySingleBlock(blockArray[x][y], blockArray[x + 1][y]);
     }
-    blockArray[widthBlockCount + outBorderBlockCount - 1][y].isExist = false;
+    blockArray[widthBlockCount + outBorderBlockCount * 2 - 1][
+      y
+    ].isExist = false;
   }
 }
 
 function moveToRightOneLine(blockArray) {
-  for (let y = 0; y < heightBlockCount; y++) {
-    for (let x = widthBlockCount + outBorderBlockCount - 1; x != 0; x--) {
+  for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+    for (let x = widthBlockCount + outBorderBlockCount * 2 - 1; x != 0; x--) {
       copySingleBlock(blockArray[x][y], blockArray[x - 1][y]);
     }
     blockArray[0][y].isExist = false;
@@ -501,8 +560,8 @@ function isRightSideCollided(blockArray1, blockArray2) {
 }
 
 function isOverlaped(blockArray1, blockArray2) {
-  for (let x = 0; x < widthBlockCount + outBorderBlockCount; x++) {
-    for (let y = 0; y < heightBlockCount; y++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       if (blockArray1[x][y].isExist && blockArray2[x][y].isExist) {
         return true;
       }
@@ -522,7 +581,7 @@ function isBlockReachedToBottomBorder(blockArray) {
 }
 
 function isBlockReachedToLeftBorder(blockArray) {
-  for (let y = 0; y < heightBlockCount; y++) {
+  for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
     if (blockArray[outBorderBlockCount][y].isExist) {
       return true;
     }
