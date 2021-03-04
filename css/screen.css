@@ -57,19 +57,11 @@ h1 {
   top: 450px;
 }
 
-/* .screen > :last-child {
-  position: relative;
-  width: 150px;
-  height: 160px;
-  right: 120px;
-  top: 450px;
-} */
-
 .screen > :last-child {
   position: relative;
   width: 150px;
   height: 160px;
-  right: 0px;
+  right: 120px;
   top: 450px;
 }
 
