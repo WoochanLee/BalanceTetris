@@ -32,12 +32,16 @@ timeId = setInterval(
 function levelUp() {
   currentDifficulty++;
   levelText.textContent = `${currentDifficulty}`;
+}
+
+function rewindTimer() {
   clearInterval(timeId);
   timeId = setInterval(
     () => gameScreen.flowGravity(),
     timePerLine * Math.pow(increaseSpeedPerDifficulty, currentDifficulty)
   );
 }
+
 function addScore(removedLineCount) {
   if (removedLineCount > 0) {
     score += removedLineCount * removedLineCount;

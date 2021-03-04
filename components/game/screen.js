@@ -129,6 +129,7 @@ class GameScreen {
       )
     ) {
       moveToBottomOneLine(this.controlBlock.blockArray);
+      rewindTimer();
     } else {
       this.shiftBlock.isAlreadyShiftedThisTime = false;
       this.isSpaceDownRunning = false;
@@ -146,6 +147,7 @@ class GameScreen {
         this.controlBlock.addNewControlBlock();
         levelUp();
         this.flowGravity();
+        rewindTimer();
       }
     }
 
