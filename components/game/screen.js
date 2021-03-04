@@ -43,8 +43,12 @@ class GameScreen {
   }
 
   drawTetrisBlocks() {
-    for (let x = 0; x < widthBlockCount; x++) {
-      for (let y = hideTopLine; y < heightBlockCount; y++) {
+    for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+      for (
+        let y = hideTopLine;
+        y < heightBlockCount + outBorderBlockCount;
+        y++
+      ) {
         let blockColor;
         let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
         if (stackedSingleBlock.isExist) {
@@ -157,9 +161,13 @@ class GameScreen {
 
   removeCompletedLine(lineCount) {
     let stackedBlockArray = this.stackedBlock.blockArray;
-    for (let y = 0; y < heightBlockCount; y++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       let isCompletedLine = true;
-      for (let x = 0; x < widthBlockCount; x++) {
+      for (
+        let x = outBorderBlockCount;
+        x < widthBlockCount + outBorderBlockCount;
+        x++
+      ) {
         if (!stackedBlockArray[x][y].isExist) {
           isCompletedLine = false;
           break;
@@ -176,15 +184,15 @@ class GameScreen {
   removeLine(removeY) {
     let stackedBlockArray = this.stackedBlock.blockArray;
     for (let y = removeY; y > 0; y--) {
-      for (let x = 0; x < widthBlockCount; x++) {
+      for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
         copySingleBlock(stackedBlockArray[x][y], stackedBlockArray[x][y - 1]);
       }
     }
   }
 
   addBlocksToStackedArray(controlBlocks, stackedBlocks) {
-    for (let x = 0; x < widthBlockCount; x++) {
-      for (let y = 0; y < heightBlockCount; y++) {
+    for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+      for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
         if (controlBlocks[x][y].isExist) {
           copySingleBlock(stackedBlocks[x][y], controlBlocks[x][y]);
         }
@@ -216,7 +224,11 @@ class GameScreen {
   }
 
   checkIsGameOver(stackedBlocks) {
-    for (let x = 0; x < widthBlockCount; x++) {
+    for (
+      let x = outBorderBlockCount;
+      x < widthBlockCount + outBorderBlockCount;
+      x++
+    ) {
       if (stackedBlocks[x][1].isExist) {
         return true;
       }

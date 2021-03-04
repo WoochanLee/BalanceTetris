@@ -1,7 +1,7 @@
 function findBlockRefPoint(blockArray) {
   let refPoint = null;
-  for (let x = 0; x < widthBlockCount; x++) {
-    for (let y = 0; y < heightBlockCount; y++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       if (blockArray[x][y].isExist) {
         refPoint = {
           x: x,
@@ -45,9 +45,9 @@ function getRotatedBlock(
 
     if (
       rotatedX >= 0 &&
-      rotatedX < widthBlockCount &&
+      rotatedX < widthBlockCount + outBorderBlockCount * 2 &&
       rotatedY >= 0 &&
-      rotatedY < heightBlockCount
+      rotatedY < heightBlockCount + outBorderBlockCount
     ) {
       tmpArray[rotatedX][rotatedY].isExist = true;
       tmpArray[rotatedX][rotatedY].blockColor =
@@ -87,7 +87,7 @@ class ControlBlock {
     this.currentRotateDirection = 0;
     this.initBlockTypes();
     this.initPreviewBlocks();
-    this.blockArray = new Array(widthBlockCount);
+    this.blockArray = new Array(widthBlockCount + outBorderBlockCount * 2);
     this.controlBlockCount = 0;
     initBlockArray(this.blockArray);
     this.initControlBlockType();
@@ -310,20 +310,20 @@ class ControlBlock {
     isSpin
   ) {
     let tmpArray = copyBlockArray(controlBlockArray);
-    if (!isBlockReachedToLeftBorder(tmpArray)) {
-      moveToLeftOneLine(tmpArray);
+    //if (!isBlockReachedToLeftBorder(tmpArray)) {
+    moveToLeftOneLine(tmpArray);
 
-      return this.rotateBlock(
-        controlBlock,
-        tmpArray,
-        stackedBlockArray,
-        allowableRange - 1,
-        isForwardRotation,
-        isSpin
-      );
-    } else {
-      return false;
-    }
+    return this.rotateBlock(
+      controlBlock,
+      tmpArray,
+      stackedBlockArray,
+      allowableRange - 1,
+      isForwardRotation,
+      isSpin
+    );
+    // } else {
+    //   return false;
+    // }
   }
 
   checkRightMoveRotation(
@@ -335,20 +335,20 @@ class ControlBlock {
     isSpin
   ) {
     let tmpArray = copyBlockArray(controlBlockArray);
-    if (!isBlockReachedToRightBorder(tmpArray)) {
-      moveToRightOneLine(tmpArray);
+    //if (!isBlockReachedToRightBorder(tmpArray)) {
+    moveToRightOneLine(tmpArray);
 
-      return this.rotateBlock(
-        controlBlock,
-        tmpArray,
-        stackedBlockArray,
-        allowableRange - 1,
-        isForwardRotation,
-        isSpin
-      );
-    } else {
-      return false;
-    }
+    return this.rotateBlock(
+      controlBlock,
+      tmpArray,
+      stackedBlockArray,
+      allowableRange - 1,
+      isForwardRotation,
+      isSpin
+    );
+    // } else {
+    //   return false;
+    // }
   }
 
   checkBottomMoveRotation(
@@ -360,20 +360,20 @@ class ControlBlock {
     isSpin
   ) {
     let tmpArray = copyBlockArray(controlBlockArray);
-    if (!isBlockReachedToBottomBorder(tmpArray)) {
-      moveToBottomOneLine(tmpArray);
+    //if (!isBlockReachedToBottomBorder(tmpArray)) {
+    moveToBottomOneLine(tmpArray);
 
-      return this.rotateBlock(
-        controlBlock,
-        tmpArray,
-        stackedBlockArray,
-        allowableRange - 1,
-        isForwardRotation,
-        isSpin
-      );
-    } else {
-      return false;
-    }
+    return this.rotateBlock(
+      controlBlock,
+      tmpArray,
+      stackedBlockArray,
+      allowableRange - 1,
+      isForwardRotation,
+      isSpin
+    );
+    // } else {
+    //   return false;
+    // }
   }
 
   removeControlBlock() {
@@ -389,15 +389,15 @@ class ControlBlockType {
 
 class StakedBlock {
   constructor() {
-    this.blockArray = new Array(widthBlockCount);
+    this.blockArray = new Array(widthBlockCount + outBorderBlockCount * 2);
     initBlockArray(this.blockArray);
   }
 }
 
 function initBlockArray(blockArray) {
-  for (let x = 0; x < widthBlockCount; x++) {
-    blockArray[x] = new Array(heightBlockCount);
-    for (let y = 0; y < heightBlockCount; y++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    blockArray[x] = new Array(heightBlockCount + outBorderBlockCount);
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       blockArray[x][y] = {
         isExist: false,
       };
@@ -408,8 +408,8 @@ function initBlockArray(blockArray) {
 }
 
 function moveToBottomOneLine(blockArray) {
-  for (let x = 0; x < widthBlockCount; x++) {
-    for (let y = heightBlockCount - 1; y != 0; y--) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = heightBlockCount + outBorderBlockCount - 1; y != 0; y--) {
       copySingleBlock(blockArray[x][y], blockArray[x][y - 1]);
     }
     blockArray[x][0].isExist = false;
@@ -417,17 +417,17 @@ function moveToBottomOneLine(blockArray) {
 }
 
 function moveToLeftOneLine(blockArray) {
-  for (let y = 0; y < heightBlockCount; y++) {
-    for (let x = 0; x < widthBlockCount - 1; x++) {
+  for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+    for (let x = 0; x < widthBlockCount + outBorderBlockCount - 1; x++) {
       copySingleBlock(blockArray[x][y], blockArray[x + 1][y]);
     }
-    blockArray[widthBlockCount - 1][y].isExist = false;
+    blockArray[widthBlockCount + outBorderBlockCount - 1][y].isExist = false;
   }
 }
 
 function moveToRightOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
-    for (let x = widthBlockCount - 1; x != 0; x--) {
+    for (let x = widthBlockCount + outBorderBlockCount - 1; x != 0; x--) {
       copySingleBlock(blockArray[x][y], blockArray[x - 1][y]);
     }
     blockArray[0][y].isExist = false;
@@ -501,7 +501,7 @@ function isRightSideCollided(blockArray1, blockArray2) {
 }
 
 function isOverlaped(blockArray1, blockArray2) {
-  for (let x = 0; x < widthBlockCount; x++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount; x++) {
     for (let y = 0; y < heightBlockCount; y++) {
       if (blockArray1[x][y].isExist && blockArray2[x][y].isExist) {
         return true;
@@ -513,7 +513,7 @@ function isOverlaped(blockArray1, blockArray2) {
 }
 
 function isBlockReachedToBottomBorder(blockArray) {
-  for (let x = 0; x < widthBlockCount; x++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
     if (blockArray[x][heightBlockCount - 1].isExist) {
       return true;
     }
@@ -523,7 +523,7 @@ function isBlockReachedToBottomBorder(blockArray) {
 
 function isBlockReachedToLeftBorder(blockArray) {
   for (let y = 0; y < heightBlockCount; y++) {
-    if (blockArray[0][y].isExist) {
+    if (blockArray[outBorderBlockCount][y].isExist) {
       return true;
     }
   }
@@ -532,8 +532,8 @@ function isBlockReachedToLeftBorder(blockArray) {
 }
 
 function isBlockReachedToRightBorder(blockArray) {
-  for (let y = 0; y < heightBlockCount; y++) {
-    if (blockArray[widthBlockCount - 1][y].isExist) {
+  for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+    if (blockArray[widthBlockCount + outBorderBlockCount - 1][y].isExist) {
       return true;
     }
   }
@@ -541,8 +541,8 @@ function isBlockReachedToRightBorder(blockArray) {
 }
 
 function clearBlockArray(blockArray) {
-  for (let x = 0; x < widthBlockCount; x++) {
-    for (let y = 0; y < heightBlockCount; y++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       blockArray[x][y].isExist = false;
       blockArray[x][y].blockColor = null;
     }
@@ -550,10 +550,10 @@ function clearBlockArray(blockArray) {
 }
 
 function copyBlockArray(blockArray) {
-  let tmpArray = new Array(widthBlockCount);
+  let tmpArray = new Array(widthBlockCount + outBorderBlockCount * 2);
   initBlockArray(tmpArray);
-  for (let x = 0; x < widthBlockCount; x++) {
-    for (let y = 0; y < heightBlockCount; y++) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       copySingleBlock(tmpArray[x][y], blockArray[x][y]);
     }
   }
