@@ -229,6 +229,7 @@ class GameScreen {
     }
 
     this.shiftBlock.isAlreadyShiftedThisTime = true;
+    this.playShiftSound();
 
     if (this.shiftBlock.isShiftedBlockEmpty()) {
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
@@ -236,7 +237,6 @@ class GameScreen {
     } else {
       let tmpBlockType = this.shiftBlock.shiftedBlock;
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
-      this.playShiftSound();
       this.changeControlBlock(tmpBlockType);
     }
 
