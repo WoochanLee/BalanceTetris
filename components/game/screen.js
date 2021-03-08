@@ -22,6 +22,7 @@ class GameScreen {
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.dropSound = document.getElementById("sound-drop");
+    this.shiftSound = document.getElementById("sound-shift");
     this.clearLineSound = document.getElementById("sound-clear_line");
     this.gameOverSound = document.getElementById("sound-game_over");
 
@@ -235,6 +236,7 @@ class GameScreen {
     } else {
       let tmpBlockType = this.shiftBlock.shiftedBlock;
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
+      this.playShiftSound();
       this.changeControlBlock(tmpBlockType);
     }
 
@@ -268,6 +270,18 @@ class GameScreen {
   stopDropSound() {
     this.dropSound.pause();
     this.dropSound.currentTime = 0.0;
+  }
+
+  playShiftSound() {
+    if (!this.shiftSound.ended) {
+      this.stopShiftSound();
+    }
+    this.shiftSound.play();
+  }
+
+  stopShiftSound() {
+    this.shiftSound.pause();
+    this.shiftSound.currentTime = 0.0;
   }
 
   playClearLineSound() {
