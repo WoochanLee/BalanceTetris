@@ -21,6 +21,7 @@ const blockShadowOpacity2 = "55";
 class GameScreen {
   constructor() {
     this.canvas = document.getElementById("canvas");
+    this.dropSound = document.getElementById("sound-drop");
 
     this.ctx = canvas.getContext("2d");
 
@@ -147,6 +148,7 @@ class GameScreen {
     } else if (this.collisionDelay < collisionDelayCount) {
       this.collisionDelay++;
     } else {
+      this.playDropSound();
       this.shiftBlock.isAlreadyShiftedThisTime = false;
       this.isSpaceDownRunning = false;
       this.collisionDelay = 0;
@@ -168,6 +170,7 @@ class GameScreen {
       }
     }
 
+    this.stopDropSound();
     this.reDraw();
   }
 
@@ -246,6 +249,15 @@ class GameScreen {
       }
     }
     return false;
+  }
+
+  playDropSound() {
+    this.dropSound.play();
+  }
+
+  stopDropSound() {
+    this.dropSound.pause;
+    this.dropSound.currentTime = 0.0;
   }
 
   reDraw() {
