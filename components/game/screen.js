@@ -240,7 +240,7 @@ class GameScreen {
       this.changeControlBlock(tmpBlockType);
     }
 
-    this.reDraw();
+    this.flowGravity();
   }
 
   changeControlBlock(controlBlockType) {
