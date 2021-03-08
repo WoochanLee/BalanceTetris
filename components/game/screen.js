@@ -22,6 +22,7 @@ class GameScreen {
   constructor() {
     this.canvas = document.getElementById("canvas");
     this.dropSound = document.getElementById("sound-drop");
+    this.clearLineSound = document.getElementById("sound-clear_line");
 
     this.ctx = canvas.getContext("2d");
 
@@ -170,7 +171,6 @@ class GameScreen {
       }
     }
 
-    this.stopDropSound();
     this.reDraw();
   }
 
@@ -193,6 +193,11 @@ class GameScreen {
         return this.removeCompletedLine(lineCount + 1);
       }
     }
+
+    if (lineCount > 0) {
+      this.playClearLineSound();
+    }
+
     return lineCount;
   }
 
@@ -252,12 +257,27 @@ class GameScreen {
   }
 
   playDropSound() {
+    if (!this.dropSound.ended) {
+      this.stopDropSound();
+    }
     this.dropSound.play();
   }
 
   stopDropSound() {
-    this.dropSound.pause;
+    this.dropSound.pause();
     this.dropSound.currentTime = 0.0;
+  }
+
+  playClearLineSound() {
+    if (!this.clearLineSound.ended) {
+      this.stopClearLineSound();
+    }
+    this.clearLineSound.play();
+  }
+
+  stopClearLineSound() {
+    this.clearLineSound.pause();
+    this.clearLineSound.currentTime = 0.0;
   }
 
   reDraw() {
