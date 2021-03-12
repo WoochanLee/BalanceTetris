@@ -97,6 +97,14 @@ function getPrevRotateDirection(currentRotateDirection, rotationAmount) {
   }
 }
 
+function markDiffToPrev(cur, prev) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+      cur[x][y].isPrevExisted = prev[x][y].isExist != cur[x][y].isExist
+    }
+  }
+}
+
 class ControlBlock {
   constructor() {
     this.currentRotateDirection = 0;
@@ -328,6 +336,7 @@ class ControlBlock {
       }
     }
 
+    markDiffToPrev(rotatedBlockArray, controlBlock.blockArray)
     this.currentRotateDirection = newRotateDirection;
     controlBlock.blockArray = rotatedBlockArray;
 
@@ -457,6 +466,7 @@ function initBlockArray(blockArray) {
     for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
       blockArray[x][y] = {
         isExist: false,
+        isPrevExisted: false,
       };
     }
   }
@@ -467,7 +477,7 @@ function initBlockArray(blockArray) {
 function moveToBottomOneLine(blockArray) {
   for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
     for (let y = heightBlockCount + outBorderBlockCount - 1; y != 0; y--) {
-      copySingleBlock(blockArray[x][y], blockArray[x][y - 1]);
+      copySingleBlockWithPrev(blockArray[x][y], blockArray[x][y - 1], blockArray[x][y].isExist); 
     }
     blockArray[x][0].isExist = false;
   }
@@ -476,7 +486,7 @@ function moveToBottomOneLine(blockArray) {
 function moveToLeftOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
     for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2 - 1; x++) {
-      copySingleBlock(blockArray[x][y], blockArray[x + 1][y]);
+      copySingleBlockWithPrev(blockArray[x][y], blockArray[x + 1][y], blockArray[x][y].isExist);
     }
     blockArray[widthBlockCount + outBorderBlockCount * 2 - 1][
       y
@@ -487,7 +497,7 @@ function moveToLeftOneLine(blockArray) {
 function moveToRightOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
     for (let x = widthBlockCount + outBorderBlockCount * 2 - 1; x != 0; x--) {
-      copySingleBlock(blockArray[x][y], blockArray[x - 1][y]);
+      copySingleBlockWithPrev(blockArray[x][y], blockArray[x - 1][y], blockArray[x][y].isExist);
     }
     blockArray[0][y].isExist = false;
   }
@@ -602,6 +612,8 @@ function isBlockReachedToRightBorder(blockArray) {
 function clearBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
     for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+      if(blockArray[x][y].isExist)
+        blockArray[x][y].isPrevExisted = true
       blockArray[x][y].isExist = false;
       blockArray[x][y].blockColor = null;
     }
@@ -617,6 +629,11 @@ function copyBlockArray(blockArray) {
     }
   }
   return tmpArray;
+}
+
+function copySingleBlockWithPrev(blockTo, blockFrom, prev) {
+  blockTo.isPrevExisted = prev
+  copySingleBlock(blockTo, blockFrom)
 }
 
 function copySingleBlock(blockTo, blockFrom) {

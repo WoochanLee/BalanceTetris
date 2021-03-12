@@ -25,6 +25,10 @@ class GameScreen {
     this.shiftSound = document.getElementById("sound-shift");
     this.clearLineSound = document.getElementById("sound-clear_line");
     this.gameOverSound = document.getElementById("sound-game_over");
+    this.background = {}
+    this.background.canvas = document.getElementById("background");
+    this.background.ctx = this.background.canvas.getContext("2d")
+    this.shouldUpdateStackedLayer = false;
 
     this.ctx = canvas.getContext("2d");
 
@@ -39,94 +43,191 @@ class GameScreen {
 
   init() {
     this.flowGravity();
+    this.initializeBackgroundLayer();
+  }
+
+  initializeBackgroundLayer() {
+    for (
+        let x = outBorderBlockCount;
+        x < widthBlockCount + outBorderBlockCount;
+        x++
+    ) {
+        let blockColor = "#37393A";
+        for (let y = hideTopLine; y < heightBlockCount; y++) {
+            this.drawBlock(x, y, this.background.ctx, blockColor)
+            this.drawTopLeftShadow(x, y, this.background.ctx, blockColor)
+        }
+
+    }
+  }
+
+  drawBlock(x, y, ctx, color) {
+    ctx.fillStyle = "#FFFFFF"
+    ctx.fillRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y + blockSize * y + topMargin,
+        blockSize,
+        blockSize
+    );
+
+    ctx.fillStyle = color + blockShadowOpacity;
+    
+    ctx.fillRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y + blockSize * y + topMargin,
+        blockSize,
+        blockSize
+    );
+  }
+
+
+  drawTopLeftShadow(x, y, ctx, color) {
+    ctx.fillStyle = color + blockShadowOpacity2;
+    ctx.fillRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y + blockSize * y + topMargin,
+        blockSize,
+        shadowWidth
+    );
+    ctx.fillRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y + blockSize * y + topMargin,
+        shadowWidth,
+        blockSize
+    );
+  }
+
+  drawBottomRightShadow(x, y, ctx, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(
+          borderWidth * (x - outBorderBlockCount) +
+          blockSize * (x - outBorderBlockCount) +
+          leftMargin,
+          borderWidth * y +
+          blockSize * y +
+          topMargin +
+          blockSize -
+          shadowWidth,
+          blockSize,
+          shadowWidth
+      )
+      ctx.fillRect(
+          borderWidth * (x - outBorderBlockCount) +
+          blockSize * (x - outBorderBlockCount) +
+          leftMargin +
+          blockSize -
+          shadowWidth,
+          borderWidth * y + blockSize * y + topMargin,
+          shadowWidth,
+          blockSize
+      );
+  }
+
+  clearPrevRect(x, y, ctx) {
+    ctx.clearRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y + blockSize * y + topMargin
+        , y,
+        blockSize,
+        blockSize
+    );
+    ctx.clearRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y +
+        blockSize * y +
+        topMargin +
+        blockSize -
+        shadowWidth,
+        blockSize,
+        shadowWidth
+    )
+    ctx.clearRect(
+        borderWidth * (x - outBorderBlockCount) +
+        blockSize * (x - outBorderBlockCount) +
+        leftMargin,
+        borderWidth * y + blockSize * y + topMargin,
+        blockSize,
+        blockSize
+    );
   }
 
   drawBlocks() {
-    this.drawTetrisBlocks();
+    this.drawControlTetrisBlocks();
+    if(this.shouldUpdateStackedLayer) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawStackedTetrisBlocks();
+        this.shouldUpdateStackedLayer = false;
+    }
     this.drawNextBlocks();
     this.drawShiftBlock();
   }
 
-  drawTetrisBlocks() {
-    for (
-      let x = outBorderBlockCount;
-      x < widthBlockCount + outBorderBlockCount;
-      x++
-    ) {
-      for (let y = hideTopLine; y < heightBlockCount; y++) {
-        let blockColor;
-        let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
-        if (stackedSingleBlock.isExist) {
-          blockColor = stackedSingleBlock.blockColor;
-        } else {
-          blockColor = "#37393A";
-        }
+    drawControlTetrisBlocks() {
+      for (
+          let x = outBorderBlockCount;
+          x < widthBlockCount + outBorderBlockCount;
+          x++
+      ) {
+          for (let y = hideTopLine; y < heightBlockCount; y++) {
+              let controlSingleBlock = this.controlBlock.blockArray[x][y];
+              //Clear the blocks maked as previous rendered
+              if(controlSingleBlock.isPrevExisted) {
+                this.clearPrevRect(x,y, this.ctx)
+                controlSingleBlock.isPrevExisted = false;
+              }
+              if (!controlSingleBlock.isExist) {
+                  continue
+              }
+              let blockColor = controlSingleBlock.blockColor;
 
-        let controlSingleBlock = this.controlBlock.blockArray[x][y];
-        if (controlSingleBlock.isExist) {
-          blockColor = controlSingleBlock.blockColor;
-        }
+              this.drawBlock(x, y, this.ctx, blockColor)
 
-        this.ctx.fillStyle = blockColor + blockShadowOpacity;
+              this.drawTopLeftShadow(x, y, this.ctx, blockColor)
 
-        this.ctx.fillRect(
-          borderWidth * (x - outBorderBlockCount) +
-            blockSize * (x - outBorderBlockCount) +
-            leftMargin,
-          borderWidth * y + blockSize * y + topMargin,
-          blockSize,
-          blockSize
-        );
-
-        //draw top left shadow
-        this.ctx.fillStyle = blockColor + blockShadowOpacity2;
-        this.ctx.fillRect(
-          borderWidth * (x - outBorderBlockCount) +
-            blockSize * (x - outBorderBlockCount) +
-            leftMargin,
-          borderWidth * y + blockSize * y + topMargin,
-          blockSize,
-          shadowWidth
-        );
-
-        this.ctx.fillRect(
-          borderWidth * (x - outBorderBlockCount) +
-            blockSize * (x - outBorderBlockCount) +
-            leftMargin,
-          borderWidth * y + blockSize * y + topMargin,
-          shadowWidth,
-          blockSize
-        );
-
-        //draw bottom right shadow
-        if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
-          this.ctx.fillStyle = blockColor;
-          this.ctx.fillRect(
-            borderWidth * (x - outBorderBlockCount) +
-              blockSize * (x - outBorderBlockCount) +
-              leftMargin,
-            borderWidth * y +
-              blockSize * y +
-              topMargin +
-              blockSize -
-              shadowWidth,
-            blockSize,
-            shadowWidth
-          );
-
-          this.ctx.fillRect(
-            borderWidth * (x - outBorderBlockCount) +
-              blockSize * (x - outBorderBlockCount) +
-              leftMargin +
-              blockSize -
-              shadowWidth,
-            borderWidth * y + blockSize * y + topMargin,
-            shadowWidth,
-            blockSize
-          );
-        }
+              if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
+                  this.drawBottomRightShadow(x, y, this.ctx, blockColor)
+              }
+          }
       }
-    }
+  }
+
+  drawStackedTetrisBlocks() {
+      for (
+          let x = outBorderBlockCount;
+          x < widthBlockCount + outBorderBlockCount;
+          x++
+      ) {
+          for (let y = hideTopLine; y < heightBlockCount; y++) {
+              let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
+              let controlSingleBlock = this.controlBlock.blockArray[x][y];
+
+              if (!stackedSingleBlock.isExist) {
+                  continue;
+              }
+
+              let blockColor = stackedSingleBlock.blockColor;
+
+              this.drawBlock(x, y, this.ctx, blockColor)
+
+              this.drawTopLeftShadow(x, y, this.ctx, blockColor)
+
+              if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
+                  this.drawBottomRightShadow(x, y, this.ctx, blockColor)
+              }
+          }
+      }
   }
 
   drawNextBlocks() {
@@ -221,6 +322,7 @@ class GameScreen {
         }
       }
     }
+    this.shouldUpdateStackedLayer = true;
   }
 
   shiftControlBlock() {
@@ -309,7 +411,6 @@ class GameScreen {
   }
 
   reDraw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawBlocks();
   }
 

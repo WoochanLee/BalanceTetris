@@ -12,8 +12,24 @@ body {
 canvas {
   width: 500;
   height: 680px;
+  left:0;
+  top:0;
+}
+#stage {
+  width:500px;
+  height:680px;
+  position:relative;
 }
 
+#canvas {
+  position: absolute;
+  z-index: 1;
+}
+
+#background {
+  z-index: 0;
+  position: absolute;
+}
 h1 {
   margin-bottom: -20px;
 }
