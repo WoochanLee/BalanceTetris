@@ -97,6 +97,14 @@ function getPrevRotateDirection(currentRotateDirection, rotationAmount) {
   }
 }
 
+function captureCurrentRenderToArray(blockArray, target) {
+  for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
+    for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
+        target[x][y].isExist =  blockArray[x][y].isExist
+    }
+  }
+}
+
 function markDiffToPrev(cur, prev) {
   for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
     for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
@@ -110,9 +118,11 @@ class ControlBlock {
     this.currentRotateDirection = 0;
     this.initBlockTypes();
     this.initPreviewBlocks();
+    this.prevBlockArray = new Array(widthBlockCount + outBorderBlockCount * 2)
     this.blockArray = new Array(widthBlockCount + outBorderBlockCount * 2);
     this.controlBlockCount = 0;
     initBlockArray(this.blockArray);
+    initBlockArray(this.prevBlockArray);
     this.initControlBlockType();
   }
 
@@ -173,9 +183,9 @@ class ControlBlock {
   }
 
   refreshBlockArray() {
+    captureCurrentRenderToArray(this.blockArray, this.prevBlockArray)
     this.currentRotateDirection = 0;
     clearBlockArray(this.blockArray);
-
     let shape = this.controlBlockType.blockType.shape;
     for (let i = 0; i < shape.length; i++) {
       let block = this.blockArray[
@@ -184,6 +194,7 @@ class ControlBlock {
       block.isExist = true;
       block.blockColor = this.controlBlockType.blockType.blockColor;
     }
+    markDiffToPrev(this.blockArray, this.prevBlockArray)
   }
 
   rotate(
@@ -261,6 +272,7 @@ class ControlBlock {
     moveRightCount,
     moveBottomCount
   ) {
+    captureCurrentRenderToArray(this.blockArray, this.prevBlockArray)
     if (
       !isInBorder(rotatedBlockArray) ||
       isOverlaped(rotatedBlockArray, stackedBlockArray)
@@ -336,7 +348,7 @@ class ControlBlock {
       }
     }
 
-    markDiffToPrev(rotatedBlockArray, controlBlock.blockArray)
+    markDiffToPrev(rotatedBlockArray, this.prevBlockArray)
     this.currentRotateDirection = newRotateDirection;
     controlBlock.blockArray = rotatedBlockArray;
 
