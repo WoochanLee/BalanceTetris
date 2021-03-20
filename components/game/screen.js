@@ -341,7 +341,7 @@ class GameScreen {
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
       this.changeControlBlock(tmpBlockType);
     }
-
+    this.reDraw()
     this.flowGravity();
   }
 
