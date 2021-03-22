@@ -21,11 +21,8 @@ const blockShadowOpacity2 = "55";
 class GameScreen {
   constructor() {
     this.renderer = new Renderer()
+    this.audioPlayer = new AudioPlayer();
     this.canvas = document.getElementById("canvas");
-    this.dropSound = document.getElementById("sound-drop");
-    this.shiftSound = document.getElementById("sound-shift");
-    this.clearLineSound = document.getElementById("sound-clear_line");
-    this.gameOverSound = document.getElementById("sound-game_over");
     this.background = {}
     this.background.canvas = document.getElementById("background");
     this.background.ctx = this.background.canvas.getContext("2d")
@@ -79,7 +76,7 @@ class GameScreen {
     } else if (this.collisionDelay < collisionDelayCount) {
       this.collisionDelay++;
     } else {
-      this.playDropSound();
+      this.audioPlayer.play(dropSound);
       this.shiftBlock.isAlreadyShiftedThisTime = false;
       this.isSpaceDownRunning = false;
       this.collisionDelay = 0;
@@ -92,7 +89,7 @@ class GameScreen {
 
       if (this.checkIsGameOver(this.stackedBlock.blockArray)) {
         this.controlBlock.removeControlBlock();
-        this.playGameOverSound();
+        this.audioPlayer.play(gameOverSound);
         gameOver();
       } else {
         this.controlBlock.addNewControlBlock();
@@ -124,7 +121,7 @@ class GameScreen {
     }
 
     if (lineCount > 0) {
-      this.playClearLineSound();
+      this.audioPlayer.play(clearLineSound);
     }
 
     return lineCount;
@@ -156,7 +153,7 @@ class GameScreen {
     }
 
     this.shiftBlock.isAlreadyShiftedThisTime = true;
-    this.playShiftSound();
+    this.audioPlayer.play(shiftSound);
 
     if (this.shiftBlock.isShiftedBlockEmpty()) {
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
@@ -186,52 +183,8 @@ class GameScreen {
     return false;
   }
 
-  playDropSound() {
-    if (!this.dropSound.ended) {
-      this.stopDropSound();
-    }
-    this.dropSound.play();
-  }
-
-  stopDropSound() {
-    this.dropSound.pause();
-    this.dropSound.currentTime = 0.0;
-  }
-
-  playShiftSound() {
-    if (!this.shiftSound.ended) {
-      this.stopShiftSound();
-    }
-    this.shiftSound.play();
-  }
-
-  stopShiftSound() {
-    this.shiftSound.pause();
-    this.shiftSound.currentTime = 0.0;
-  }
-
-  playClearLineSound() {
-    if (!this.clearLineSound.ended) {
-      this.stopClearLineSound();
-    }
-    this.clearLineSound.play();
-  }
-
-  stopClearLineSound() {
-    this.clearLineSound.pause();
-    this.clearLineSound.currentTime = 0.0;
-  }
-
-  playGameOverSound() {
-    if (!this.gameOverSound.ended) {
-      this.stopGameOverSound();
-    }
-    this.gameOverSound.play();
-  }
-
-  stopGameOverSound() {
-    this.gameOverSound.pause();
-    this.gameOverSound.currentTime = 0.0;
+  reDraw() {
+    this.drawBlocks();
   }
 
   onEventLeftArrow() {
