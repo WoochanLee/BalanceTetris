@@ -20,6 +20,7 @@ const blockShadowOpacity2 = "55";
 
 class GameScreen {
   constructor() {
+    this.renderer = new Renderer()
     this.canvas = document.getElementById("canvas");
     this.dropSound = document.getElementById("sound-drop");
     this.shiftSound = document.getElementById("sound-shift");
@@ -42,192 +43,13 @@ class GameScreen {
   }
 
   init() {
-    this.flowGravity();
-    this.initializeBackgroundLayer();
-  }
-
-  initializeBackgroundLayer() {
-    for (
-        let x = outBorderBlockCount;
-        x < widthBlockCount + outBorderBlockCount;
-        x++
-    ) {
-        let blockColor = "#37393A";
-        for (let y = hideTopLine; y < heightBlockCount; y++) {
-            this.drawBlock(x, y, this.background.ctx, blockColor)
-            this.drawTopLeftShadow(x, y, this.background.ctx, blockColor)
-        }
-
-    }
-  }
-
-  drawBlock(x, y, ctx, color) {
-    ctx.fillStyle = "#FFFFFF"
-    ctx.fillRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y + blockSize * y + topMargin,
-        blockSize,
-        blockSize
-    );
-
-    ctx.fillStyle = color + blockShadowOpacity;
-    
-    ctx.fillRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y + blockSize * y + topMargin,
-        blockSize,
-        blockSize
-    );
-  }
-
-
-  drawTopLeftShadow(x, y, ctx, color) {
-    ctx.fillStyle = color + blockShadowOpacity2;
-    ctx.fillRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y + blockSize * y + topMargin,
-        blockSize,
-        shadowWidth
-    );
-    ctx.fillRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y + blockSize * y + topMargin,
-        shadowWidth,
-        blockSize
-    );
-  }
-
-  drawBottomRightShadow(x, y, ctx, color) {
-      ctx.fillStyle = color;
-      ctx.fillRect(
-          borderWidth * (x - outBorderBlockCount) +
-          blockSize * (x - outBorderBlockCount) +
-          leftMargin,
-          borderWidth * y +
-          blockSize * y +
-          topMargin +
-          blockSize -
-          shadowWidth,
-          blockSize,
-          shadowWidth
-      )
-      ctx.fillRect(
-          borderWidth * (x - outBorderBlockCount) +
-          blockSize * (x - outBorderBlockCount) +
-          leftMargin +
-          blockSize -
-          shadowWidth,
-          borderWidth * y + blockSize * y + topMargin,
-          shadowWidth,
-          blockSize
-      );
-  }
-
-  clearPrevRect(x, y, ctx) {
-    ctx.clearRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y + blockSize * y + topMargin
-        , y,
-        blockSize,
-        blockSize
-    );
-    ctx.clearRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y +
-        blockSize * y +
-        topMargin +
-        blockSize -
-        shadowWidth,
-        blockSize,
-        shadowWidth
-    )
-    ctx.clearRect(
-        borderWidth * (x - outBorderBlockCount) +
-        blockSize * (x - outBorderBlockCount) +
-        leftMargin,
-        borderWidth * y + blockSize * y + topMargin,
-        blockSize,
-        blockSize
-    );
+    this.flowGravityWithDraw();
   }
 
   drawBlocks() {
-    this.drawControlTetrisBlocks();
-    if(this.shouldUpdateStackedLayer) {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawStackedTetrisBlocks();
-        this.shouldUpdateStackedLayer = false;
-    }
+    this.renderer.renderWtihMerge(this.controlBlock.blockArray, this.stackedBlock.blockArray)
     this.drawNextBlocks();
     this.drawShiftBlock();
-  }
-
-    drawControlTetrisBlocks() {
-      for (
-          let x = outBorderBlockCount;
-          x < widthBlockCount + outBorderBlockCount;
-          x++
-      ) {
-          for (let y = hideTopLine; y < heightBlockCount; y++) {
-              let controlSingleBlock = this.controlBlock.blockArray[x][y];
-              //Clear the blocks maked as previous rendered
-              if(controlSingleBlock.isPrevExisted) {
-                this.clearPrevRect(x,y, this.ctx)
-                controlSingleBlock.isPrevExisted = false;
-              }
-              if (!controlSingleBlock.isExist) {
-                  continue
-              }
-              let blockColor = controlSingleBlock.blockColor;
-
-              this.drawBlock(x, y, this.ctx, blockColor)
-
-              this.drawTopLeftShadow(x, y, this.ctx, blockColor)
-
-              if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
-                  this.drawBottomRightShadow(x, y, this.ctx, blockColor)
-              }
-          }
-      }
-  }
-
-  drawStackedTetrisBlocks() {
-      for (
-          let x = outBorderBlockCount;
-          x < widthBlockCount + outBorderBlockCount;
-          x++
-      ) {
-          for (let y = hideTopLine; y < heightBlockCount; y++) {
-              let stackedSingleBlock = this.stackedBlock.blockArray[x][y];
-              let controlSingleBlock = this.controlBlock.blockArray[x][y];
-
-              if (!stackedSingleBlock.isExist) {
-                  continue;
-              }
-
-              let blockColor = stackedSingleBlock.blockColor;
-
-              this.drawBlock(x, y, this.ctx, blockColor)
-
-              this.drawTopLeftShadow(x, y, this.ctx, blockColor)
-
-              if (controlSingleBlock.isExist || stackedSingleBlock.isExist) {
-                  this.drawBottomRightShadow(x, y, this.ctx, blockColor)
-              }
-          }
-      }
   }
 
   drawNextBlocks() {
@@ -237,6 +59,11 @@ class GameScreen {
 
   drawShiftBlock() {
     this.shiftBlock.draw(this.ctx);
+  }
+
+  flowGravityWithDraw() {
+    this.flowGravity()
+    this.drawBlocks();
   }
 
   flowGravity() {
@@ -270,12 +97,10 @@ class GameScreen {
       } else {
         this.controlBlock.addNewControlBlock();
         levelUp();
-        this.flowGravity();
+        this.flowGravityWithDraw();
         rewindTimer();
       }
     }
-
-    this.reDraw();
   }
 
   removeCompletedLine(lineCount) {
@@ -341,8 +166,7 @@ class GameScreen {
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
       this.changeControlBlock(tmpBlockType);
     }
-    this.reDraw()
-    this.flowGravity();
+    this.flowGravityWithDraw()
   }
 
   changeControlBlock(controlBlockType) {
@@ -410,10 +234,6 @@ class GameScreen {
     this.gameOverSound.currentTime = 0.0;
   }
 
-  reDraw() {
-    this.drawBlocks();
-  }
-
   onEventLeftArrow() {
     if (
       couldBlockMoveToLeft(
@@ -437,7 +257,7 @@ class GameScreen {
   }
 
   onEventDownArrow() {
-    this.flowGravity();
+    this.flowGravityWithDraw();
   }
 
   onEventUpArrow() {
@@ -455,6 +275,7 @@ class GameScreen {
     while (this.isSpaceDownRunning) {
       this.flowGravity();
     }
+    this.drawBlocks()
   }
 
   onEventShift() {

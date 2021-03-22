@@ -48,5 +48,5 @@ function handleKeyboardEvent(e) {
       gameScreen.onEventKeyC();
       break;
   }
-  gameScreen.reDraw();
+  gameScreen.drawBlocks();
 }
