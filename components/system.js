@@ -37,7 +37,7 @@ function levelUp() {
 function rewindTimer() {
   clearInterval(timeId);
   timeId = setInterval(
-    () => gameScreen.flowGravity(),
+    () => gameScreen.flowGravityWithDraw(),
     timePerLine * Math.pow(increaseSpeedPerDifficulty, currentDifficulty)
   );
 }
