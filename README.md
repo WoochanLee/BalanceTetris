@@ -11,7 +11,7 @@
     </p>
     <br>
     <br>
-    <p align="center">🕹️You Can Single Play Online👇</p>
+    <p align="center">🕹️You Can Play Alone👇</p>
     <div align="center">
         <a href="https://woochanlee.github.io/BalanceTetris/">
             <u>https://woochanlee.github.io/BalanceTetris/</u>
@@ -29,7 +29,7 @@
 
 # Features 🎮
 
-Easy to Play: You can play Tetris anywhere with a computer web browser.
+Easy to Play: You can play Tetris on any web browser.
 <br>
 Using T-spin: You can use T-spin technic.
 <br>
@@ -49,7 +49,7 @@ Cats are cute: Cats are cute.
 <b>Space Bar</b> --> Lower the Control Block to the floor at once
 <br>
 <br>
-<b>Left Shift</b> --> Save or eject blocks to temporary storage
+<b>Left Shift</b> --> Hold the block to temporary storage
 <br>
 <br>
 <br>
