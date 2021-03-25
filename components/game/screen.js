@@ -40,6 +40,8 @@ class GameScreen {
   }
 
   init() {
+    this.shiftBlock.init(this.ctx);
+    this.previewBlockManager.init(this.ctx);
     this.flowGravityWithDraw();
   }
 
