@@ -169,7 +169,7 @@ class GameScreen {
   }
 
   changeControlBlock(controlBlockType) {
-    this.controlBlock.changeContorlBlock(controlBlockType);
+    this.controlBlock.changeControlBlock(controlBlockType);
   }
 
   checkIsGameOver(stackedBlocks) {

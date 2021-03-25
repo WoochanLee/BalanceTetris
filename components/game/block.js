@@ -150,7 +150,7 @@ class ControlBlock {
     ]);
   }
 
-  changeContorlBlock(controlBlockType) {
+  changeControlBlock(controlBlockType) {
     this.controlBlockType = controlBlockType;
     this.refreshBlockArray();
   }
