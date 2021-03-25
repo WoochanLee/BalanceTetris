@@ -4,10 +4,10 @@ const previewBackgroundColor = "#444444";
  * preview block setting
  */
 const previewBlockLocation = [
-  [440, 50],
-  [440, 140],
-  [440, 210],
-  [440, 280],
+  [440, 70],
+  [440, 160],
+  [440, 230],
+  [440, 300],
 ];
 
 const justPreviewBlockRadius = 45;
@@ -31,6 +31,10 @@ class PreviewBlockManager {
     }
   }
 
+  init(ctx) {
+    this._drawTitle(ctx);
+  }
+
   setBlockType(previewBlockQueue) {
     for (let i = 0; i < this.previewBlockArray.length; i++) {
       this.previewBlockArray[i].setBlockType(previewBlockQueue.get(i));
@@ -41,6 +45,13 @@ class PreviewBlockManager {
     for (let i = 0; i < this.previewBlockArray.length; i++) {
       this.previewBlockArray[i].draw(ctx);
     }
+  }
+
+  _drawTitle(ctx) {
+    ctx.font = '16px -apple-system, BlinkMacSystemFont, Open Sans, sans-serif';
+    ctx.fillStyle = shiftBackgroundColor;
+    ctx.textAlign = "center";
+    ctx.fillText('NEXT', previewBlockLocation[0][0], 15);
   }
 }
 

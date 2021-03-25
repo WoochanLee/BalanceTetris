@@ -4,7 +4,7 @@ const shiftBackgroundColor = "#444444";
  * shift block setting
  */
 const shiftBlockLocationX = 50;
-const shiftBlockLocationY = 50;
+const shiftBlockLocationY = 70;
 
 const shiftBlockRadius = 45;
 
@@ -55,11 +55,22 @@ class ShiftBlock {
         2;
   }
 
+  init(ctx) {
+    this._drawTitle(ctx);
+  }
+
   draw(ctx) {
     this.drawBackgroundCircle(ctx);
     if (!this.isShiftedBlockEmpty()) {
       this.drawShiftBlock(ctx);
     }
+  }
+
+  _drawTitle(ctx) {
+    ctx.font = '16px -apple-system, BlinkMacSystemFont, Open Sans, sans-serif';
+    ctx.fillStyle = shiftBackgroundColor;
+    ctx.textAlign = "center";
+    ctx.fillText('HOLD', shiftBlockLocationX, shiftBlockLocationY - 55);
   }
 
   drawBackgroundCircle(ctx) {
