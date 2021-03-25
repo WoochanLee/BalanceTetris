@@ -1,6 +1,7 @@
 body {
   display: flex;
   justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;
 }
 
 .main {
@@ -15,6 +16,7 @@ canvas {
   left:0;
   top:0;
 }
+
 #stage {
   width:500px;
   height:680px;
@@ -30,6 +32,7 @@ canvas {
   z-index: 0;
   position: absolute;
 }
+
 h1 {
   margin-bottom: -20px;
 }
