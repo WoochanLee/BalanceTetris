@@ -1,0 +1,110 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "Renderer", function () {
+  return Renderer;
+});
+_parcelHelpers.export(exports, "initBlockArray", function () {
+  return initBlockArray;
+});
+var _utilsConst = require("../utils/const");
+function initBlockArray(blockArray) {
+  for (let x = 0; x < _utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount * 2; x++) {
+    blockArray[x] = new Array(_utilsConst.heightBlockCount + _utilsConst.outBorderBlockCount);
+    for (let y = 0; y < _utilsConst.heightBlockCount + _utilsConst.outBorderBlockCount; y++) {
+      blockArray[x][y] = {
+        isExisted: false,
+        isDifferent: false,
+        blockColor: null
+      };
+    }
+  }
+}
+class Renderer {
+  constructor() {
+    this.main = {};
+    this.background = {};
+    this.main.canvas = document.getElementById("canvas");
+    this.main.contxt = this.main.canvas.getContext("2d");
+    this.background.canvas = document.getElementById("background");
+    this.background.contxt = this.background.canvas.getContext("2d");
+    this.previousRenderBlocks = new Array(_utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount * 2);
+    this.mergeCache = new Array(_utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount * 2);
+    initBlockArray(this.previousRenderBlocks);
+    initBlockArray(this.mergeCache);
+    this._initializeBackgroundLayer();
+  }
+  renderWtihMerge(first, second) {
+    const renderTarget = this._mergeArray(first, second);
+    this._markDifferenceBetweenPreviousRenderedStatus(renderTarget);
+    for (let x = _utilsConst.outBorderBlockCount; x < _utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount; x++) {
+      for (let y = _utilsConst.hideTopLine; y < _utilsConst.heightBlockCount; y++) {
+        let block = this.previousRenderBlocks[x][y];
+        if (block.isDifferent) {
+          this._clearPrevRect(x, y, this.main.contxt);
+          if (renderTarget[x][y].isExist) {
+            let blockColor = renderTarget[x][y].blockColor;
+            this._drawBlock(x, y, this.main.contxt, blockColor);
+            this._drawTopLeftShadow(x, y, this.main.contxt, blockColor);
+            this._drawBottomRightShadow(x, y, this.main.contxt, blockColor);
+          }
+          block.isDifferent = false;
+        }
+        block.isExist = renderTarget[x][y].isExist;
+      }
+    }
+  }
+  _initializeBackgroundLayer() {
+    for (let x = _utilsConst.outBorderBlockCount; x < _utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount; x++) {
+      let blockColor = "#37393A";
+      for (let y = _utilsConst.hideTopLine; y < _utilsConst.heightBlockCount; y++) {
+        this._drawBlock(x, y, this.background.contxt, blockColor);
+        this._drawTopLeftShadow(x, y, this.background.contxt, blockColor);
+      }
+    }
+  }
+  _mergeArray(first, second) {
+    for (let x = _utilsConst.outBorderBlockCount; x < _utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount; x++) {
+      for (let y = _utilsConst.hideTopLine; y < _utilsConst.heightBlockCount; y++) {
+        this.mergeCache[x][y].isExist = false;
+        this.mergeCache[x][y].blockColor = null;
+        if (first[x][y].isExist) {
+          this.mergeCache[x][y].isExist = true;
+          this.mergeCache[x][y].blockColor = first[x][y].blockColor;
+        }
+        if (second[x][y].isExist) {
+          this.mergeCache[x][y].isExist = true;
+          this.mergeCache[x][y].blockColor = second[x][y].blockColor;
+        }
+      }
+    }
+    return this.mergeCache;
+  }
+  _markDifferenceBetweenPreviousRenderedStatus(current) {
+    for (let x = 0; x < _utilsConst.widthBlockCount + _utilsConst.outBorderBlockCount * 2; x++) {
+      for (let y = 0; y < _utilsConst.heightBlockCount + _utilsConst.outBorderBlockCount; y++) {
+        this.previousRenderBlocks[x][y].isDifferent = this.previousRenderBlocks[x][y].isExist != current[x][y].isExist || this.previousRenderBlocks[x][y].blockColor != current[x][y].blockColor;
+      }
+    }
+  }
+  _drawBlock(x, y, ctx, color) {
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, _utilsConst.blockSize, _utilsConst.blockSize);
+    ctx.fillStyle = color + _utilsConst.blockShadowOpacity;
+    ctx.fillRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, _utilsConst.blockSize, _utilsConst.blockSize);
+  }
+  _drawTopLeftShadow(x, y, ctx, color) {
+    ctx.fillStyle = color + _utilsConst.blockShadowOpacity2;
+    ctx.fillRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, _utilsConst.blockSize, _utilsConst.shadowWidth);
+    ctx.fillRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, _utilsConst.shadowWidth, _utilsConst.blockSize);
+  }
+  _drawBottomRightShadow(x, y, ctx, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin + _utilsConst.blockSize - _utilsConst.shadowWidth, _utilsConst.blockSize, _utilsConst.shadowWidth);
+    ctx.fillRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin + _utilsConst.blockSize - _utilsConst.shadowWidth, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, _utilsConst.shadowWidth, _utilsConst.blockSize);
+  }
+  _clearPrevRect(x, y, ctx) {
+    ctx.clearRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, y, _utilsConst.blockSize, _utilsConst.blockSize);
+    ctx.clearRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin + _utilsConst.blockSize - _utilsConst.shadowWidth, _utilsConst.blockSize, _utilsConst.shadowWidth);
+    ctx.clearRect(_utilsConst.borderWidth * (x - _utilsConst.outBorderBlockCount) + _utilsConst.blockSize * (x - _utilsConst.outBorderBlockCount) + leftMargin, _utilsConst.borderWidth * y + _utilsConst.blockSize * y + topMargin, _utilsConst.blockSize, _utilsConst.blockSize);
+  }
+}

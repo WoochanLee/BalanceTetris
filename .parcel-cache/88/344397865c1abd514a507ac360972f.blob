@@ -1,0 +1,5 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+var _screen = require("./screen");
+const gameScreen = new _screen.GameScreen();
+exports.default = gameScreen;

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Balance Tetris">
+    <meta property="og:description" content="Tetris built with vanilla javascript">
+    <meta property="og:image" content="https://raw.githubusercontent.com/WoochanLee/BalanceTetris/gh-pages/../res/image_800x800.png">
+    <meta name="description" content="Tetris built with vanilla javascript">
+    <meta name="keywords" content="Tetris,balancehero,balancetetris,테트리스,밸런스히어로,밸런스테트리스">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.HASH_REF_9a2330020310a6526c73819bf42c17d3.ico">
+    <link rel="stylesheet" href="/index.HASH_REF_af5d8f1f5b132de739c3e4fb1bf778f7.css">
+    <title>Balance Tetris</title>
+    <style>
+</style>
+  </head>
+  <body>
+    <div class="main">
+      <!-- <button id="test" onclick="onClickTestButton();">스탑</button> -->
+      <!-- <canvas id="canvas" width="295" height="745"></canvas> -->
+      <!-- <h1>BALANCE TETRIS</h1> -->
+      <img class="logo__title" src="/logo.HASH_REF_12885a65309e74d0539cde2053f08834.png">
+      <div class="board">
+        <div class="board__logo">
+          <img class="board__logo__speed" src="/speed.HASH_REF_29f7da1b7ac93f7881fcad12a6afe896.png">
+          <h2 id="level">0
+        </h2></div>
+        <div class="board__logo">
+          <img class="board__logo__score" src="/score.HASH_REF_70882d5a62234e3bd2bdb24e0a64b08c.png">
+          <h2 id="score">0
+        </h2></div>
+      </div>
+      <h5 id="game-over">GAME OVER</h5>
+      <div class="screen">
+        <img id="youngImg" src="/young.HASH_REF_093beb1e8ddc5534418057b1fd8f7911.png">
+        <div id="stage">
+            <canvas id="canvas" width="500" height="680"></canvas>
+            <canvas id="background" width="500" height="680"></canvas>
+        </div>
+        <img id="chanImg" src="/chan.HASH_REF_8fa0bfbea6d9ce5c523529c3a15ab00d.png">
+      </div>
+    </div>
+    <audio id="sound-drop" style="display:none
+">
+      <source src="/drop.HASH_REF_5c6644da3ee089a39b437f2d0f738870.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound-shift" style="display:none
+">
+      <source src="/shift.HASH_REF_85775e41c4652e09520215d2f064d9b1.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound-clear_line" style="display:none
+">
+      <source src="/clear_line.HASH_REF_53b9d0721962bf7b1673c0ebc0fd7517.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound-game_over" style="display:none
+">
+      <source src="/game_over.HASH_REF_98f1adb5198d25793e57793a0c7e7a2a.mp3" type="audio/mp3">
+    </audio>
+    <script type="text/javascript" src="/index.HASH_REF_0fa2489aa94c8731ee2aee9f3fafb3e2.js"></script>
+  </body>
+</html>

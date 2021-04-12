@@ -1,0 +1,92 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+canvas {
+  width: 500;
+  height: 680px;
+  left:0;
+  top:0;
+}
+#stage {
+  width:500px;
+  height:680px;
+  position:relative;
+}
+
+#canvas {
+  position: absolute;
+  z-index: 1;
+}
+
+#background {
+  z-index: 0;
+  position: absolute;
+}
+h1 {
+  margin-bottom: -20px;
+}
+
+.board {
+  display: flex;
+}
+
+.logo__title {
+  width: 550px;
+  height: 80px;
+}
+
+.board__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 10px;
+  margin-bottom: 10px;
+}
+
+.board__logo__speed {
+  width: 100px;
+  height: 30px;
+}
+
+.board__logo__score {
+  width: 100px;
+  height: 30px;
+}
+
+.screen {
+  display: flex;
+}
+
+.screen > :first-child {
+  position: relative;
+  width: 150px;
+  height: 160px;
+  left: 100px;
+  top: 450px;
+}
+
+.screen > :last-child {
+  position: relative;
+  width: 150px;
+  height: 160px;
+  right: 120px;
+  top: 450px;
+}
+
+#level {
+  margin-right: 10px;
+}
+
+#game-over {
+  margin-top: -20px;
+  margin-bottom: 0px;
+  visibility: hidden;
+}
