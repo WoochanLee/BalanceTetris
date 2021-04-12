@@ -2,9 +2,10 @@
   "name": "balancetetris",
   "version": "1.0.0",
   "description": "<div>     <p align=\"center\">     <a href=\"https://github.com/WoochanLee/BalanceTetris\">         <img src=\"https://github.com/WoochanLee/BalanceTetris/blob/master/res/young.png?raw=true\" height=\"300\" />         <img src=\"https://github.com/WoochanLee/BalanceTetris/blob/master/res/chan.png?raw=true\" height=\"300\" />     </a>     </p>     <br>     <p align=\"center\">         <img src=\"https://github.com/WoochanLee/BalanceTetris/blob/master/res/logo.png?raw=true\" width=\"600\"/>     </p>     <br>     <br>     <p align=\"center\">🕹️You Can Play Alone👇</p>     <div align=\"center\">         <a href=\"https://woochanlee.github.io/BalanceTetris/\">             <u>https://woochanlee.github.io/BalanceTetris/</u>         </a>     </div>     <br>     <br>     <p align=\"center\">         <img src=\"https://img.shields.io/badge/license-GPL%20v3-red.svg\">         <img src=\"https://img.shields.io/badge/release-alpha-blue.svg\">     <br /> </div> <br> <br>",
-  "main": "index.html",
+  "main": "index.js",
   "scripts": {
     "dev": "parcel public/index.html",
+    "build": "parcel build src/index.js --dist-dir dist/client",
     "format": "prettier \"src/**/*.{js,html}\" --write",
     "test": "test"
   },
