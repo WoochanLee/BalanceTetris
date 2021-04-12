@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "parcel public/index.html",
-    
+    "format": "prettier \"src/**/*.{js,html}\" --write",
     "test": "test"
   },
   "repository": {
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/WoochanLee/BalanceTetris#readme",
   "devDependencies": {
-    "parcel": "*"
+    "parcel": "*",
+    "prettier": "^2.2.1"
   }
 }

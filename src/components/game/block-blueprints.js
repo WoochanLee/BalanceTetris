@@ -378,5 +378,12 @@ class BlockTypeSeven {
   }
 }
 
-
-export { BlockTypeFive, BlockTypeFour, BlockTypeOne, BlockTypeSeven, BlockTypeSix, BlockTypeThree, BlockTypeTwo }
+export {
+  BlockTypeFive,
+  BlockTypeFour,
+  BlockTypeOne,
+  BlockTypeSeven,
+  BlockTypeSix,
+  BlockTypeThree,
+  BlockTypeTwo,
+};

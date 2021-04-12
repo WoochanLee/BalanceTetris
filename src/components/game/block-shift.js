@@ -135,4 +135,4 @@ class ShiftBlock {
   }
 }
 
-export { ShiftBlock }
+export { ShiftBlock };

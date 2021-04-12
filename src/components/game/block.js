@@ -1,8 +1,34 @@
 // import { initBlockArray } from "../../renderer/renderer"
-import { BlockTypeFive, BlockTypeFour, BlockTypeOne, BlockTypeSeven, BlockTypeSix, BlockTypeThree, BlockTypeTwo } from "./block-blueprints";
-import { shuffleArray, Queue } from "../../utils/util"
-import { borderWidth, blockSize, widthBlockCount, widthBlockPaddingCount, heightBlockCount, hideTopLine, shadowWidth, outBorderBlockCount, blockShadowOpacity, blockShadowOpacity2, topMargin, leftMargin} from "../../utils/const"
-import { timePerLine, increaseSpeedPerDifficulty, allowableRotationRange, collisionDelayCount } from "../../settings/config"
+import {
+  BlockTypeFive,
+  BlockTypeFour,
+  BlockTypeOne,
+  BlockTypeSeven,
+  BlockTypeSix,
+  BlockTypeThree,
+  BlockTypeTwo,
+} from "./block-blueprints";
+import { shuffleArray, Queue } from "../../utils/util";
+import {
+  borderWidth,
+  blockSize,
+  widthBlockCount,
+  widthBlockPaddingCount,
+  heightBlockCount,
+  hideTopLine,
+  shadowWidth,
+  outBorderBlockCount,
+  blockShadowOpacity,
+  blockShadowOpacity2,
+  topMargin,
+  leftMargin,
+} from "../../utils/const";
+import {
+  timePerLine,
+  increaseSpeedPerDifficulty,
+  allowableRotationRange,
+  collisionDelayCount,
+} from "../../settings/config";
 
 function findBlockRefPoint(blockArray) {
   let refPoint = null;
@@ -472,7 +498,11 @@ function initBlockArray(blockArray) {
 function moveToBottomOneLine(blockArray) {
   for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
     for (let y = heightBlockCount + outBorderBlockCount - 1; y != 0; y--) {
-      copySingleBlockWithPrev(blockArray[x][y], blockArray[x][y - 1], blockArray[x][y].isExist); 
+      copySingleBlockWithPrev(
+        blockArray[x][y],
+        blockArray[x][y - 1],
+        blockArray[x][y].isExist
+      );
     }
     blockArray[x][0].isExist = false;
   }
@@ -481,7 +511,11 @@ function moveToBottomOneLine(blockArray) {
 function moveToLeftOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
     for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2 - 1; x++) {
-      copySingleBlockWithPrev(blockArray[x][y], blockArray[x + 1][y], blockArray[x][y].isExist);
+      copySingleBlockWithPrev(
+        blockArray[x][y],
+        blockArray[x + 1][y],
+        blockArray[x][y].isExist
+      );
     }
     blockArray[widthBlockCount + outBorderBlockCount * 2 - 1][
       y
@@ -492,7 +526,11 @@ function moveToLeftOneLine(blockArray) {
 function moveToRightOneLine(blockArray) {
   for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
     for (let x = widthBlockCount + outBorderBlockCount * 2 - 1; x != 0; x--) {
-      copySingleBlockWithPrev(blockArray[x][y], blockArray[x - 1][y], blockArray[x][y].isExist);
+      copySingleBlockWithPrev(
+        blockArray[x][y],
+        blockArray[x - 1][y],
+        blockArray[x][y].isExist
+      );
     }
     blockArray[0][y].isExist = false;
   }
@@ -607,8 +645,7 @@ function isBlockReachedToRightBorder(blockArray) {
 function clearBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {
     for (let y = 0; y < heightBlockCount + outBorderBlockCount; y++) {
-      if(blockArray[x][y].isExist)
-        blockArray[x][y].isPrevExisted = true
+      if (blockArray[x][y].isExist) blockArray[x][y].isPrevExisted = true;
       blockArray[x][y].isExist = false;
       blockArray[x][y].blockColor = null;
     }
@@ -627,8 +664,8 @@ function copyBlockArray(blockArray) {
 }
 
 function copySingleBlockWithPrev(blockTo, blockFrom, prev) {
-  blockTo.isPrevExisted = prev
-  copySingleBlock(blockTo, blockFrom)
+  blockTo.isPrevExisted = prev;
+  copySingleBlock(blockTo, blockFrom);
 }
 
 function copySingleBlock(blockTo, blockFrom) {
@@ -636,7 +673,10 @@ function copySingleBlock(blockTo, blockFrom) {
   blockTo.blockColor = blockFrom.blockColor;
 }
 
-export { ControlBlock, ControlBlockType, StakedBlock, 
+export {
+  ControlBlock,
+  ControlBlockType,
+  StakedBlock,
   clearBlockArray,
   copySingleBlock,
   copySingleBlockWithPrev,
@@ -659,4 +699,5 @@ export { ControlBlock, ControlBlockType, StakedBlock,
   isRightSideCollided,
   moveToLeftOneLine,
   moveToRightOneLine,
-  moveToBottomOneLine }
+  moveToBottomOneLine,
+};

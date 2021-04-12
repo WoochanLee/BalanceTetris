@@ -1,5 +1,5 @@
-import gameScreen from "./game"
-import { isGameOver } from "./system"
+import gameScreen from "./game";
+import { isGameOver } from "./system";
 
 window.onkeydown = (e) => {
   handleKeyboardEvent(e);

@@ -1,6 +1,10 @@
-import gameScreen from "./game"
-import { timePerLine, increaseSpeedPerDifficulty, allowableRotationRange, collisionDelayCount } from "../settings/config"
-
+import gameScreen from "./game";
+import {
+  timePerLine,
+  increaseSpeedPerDifficulty,
+  allowableRotationRange,
+  collisionDelayCount,
+} from "../settings/config";
 
 let testButtonOn = false;
 let timeId = null;
@@ -68,10 +72,11 @@ function makeFailEasterEgg() {
   youngImg.src = "res/young_fail.png";
 }
 
-export { 
+export {
   addScore,
   gameOver,
   levelUp,
   makeFailEasterEgg,
-  rewindTimer, 
-  isGameOver }
+  rewindTimer,
+  isGameOver,
+};

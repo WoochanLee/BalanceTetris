@@ -1,5 +1,5 @@
-import { GameScreen } from "./screen"
+import { GameScreen } from "./screen";
 
 const gameScreen = new GameScreen();
 
-export default gameScreen
+export default gameScreen;
