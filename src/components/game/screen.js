@@ -1,5 +1,8 @@
-import { Renderer } from "../../renderer/renderer"
-import { ControlBlock, ControlBlockType, StakedBlock, 
+import { Renderer } from "../../renderer/renderer";
+import {
+  ControlBlock,
+  ControlBlockType,
+  StakedBlock,
   clearBlockArray,
   copySingleBlock,
   copySingleBlockWithPrev,
@@ -22,29 +25,45 @@ import { ControlBlock, ControlBlockType, StakedBlock,
   isRightSideCollided,
   moveToLeftOneLine,
   moveToRightOneLine,
-  moveToBottomOneLine }from "../game/block"
-import { ShiftBlock } from "../game/block-shift"
-import AudioPlayer from "../../resources/audio-player"
-import {PreviewBlockManager} from "../game/block-preview"
-import { 
+  moveToBottomOneLine,
+} from "../game/block";
+import { ShiftBlock } from "../game/block-shift";
+import AudioPlayer from "../../resources/audio-player";
+import { PreviewBlockManager } from "../game/block-preview";
+import {
   addScore,
   gameOver,
   levelUp,
   makeFailEasterEgg,
-  rewindTimer, 
-  isGameOver } from "../system"
-import { widthBlockCount, heightBlockCount, outBorderBlockCount } from "../../utils/const"
-import { timePerLine, increaseSpeedPerDifficulty, allowableRotationRange, collisionDelayCount } from "../../settings/config"
-import {dropSound, shiftSound, clearLineSound, gameOverSound} from "../../resources/sounds"
+  rewindTimer,
+  isGameOver,
+} from "../system";
+import {
+  widthBlockCount,
+  heightBlockCount,
+  outBorderBlockCount,
+} from "../../utils/const";
+import {
+  timePerLine,
+  increaseSpeedPerDifficulty,
+  allowableRotationRange,
+  collisionDelayCount,
+} from "../../settings/config";
+import {
+  dropSound,
+  shiftSound,
+  clearLineSound,
+  gameOverSound,
+} from "../../resources/sounds";
 
 class GameScreen {
   constructor() {
-    this.renderer = new Renderer()
+    this.renderer = new Renderer();
     this.audioPlayer = new AudioPlayer();
     this.canvas = document.getElementById("canvas");
-    this.background = {}
+    this.background = {};
     this.background.canvas = document.getElementById("background");
-    this.background.ctx = this.background.canvas.getContext("2d")
+    this.background.ctx = this.background.canvas.getContext("2d");
     this.shouldUpdateStackedLayer = false;
 
     this.ctx = canvas.getContext("2d");
@@ -63,7 +82,10 @@ class GameScreen {
   }
 
   drawBlocks() {
-    this.renderer.renderWtihMerge(this.controlBlock.blockArray, this.stackedBlock.blockArray)
+    this.renderer.renderWtihMerge(
+      this.controlBlock.blockArray,
+      this.stackedBlock.blockArray
+    );
     this.drawNextBlocks();
     this.drawShiftBlock();
   }
@@ -78,7 +100,7 @@ class GameScreen {
   }
 
   flowGravityWithDraw() {
-    this.flowGravity()
+    this.flowGravity();
     this.drawBlocks();
   }
 
@@ -182,7 +204,7 @@ class GameScreen {
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
       this.changeControlBlock(tmpBlockType);
     }
-    this.flowGravityWithDraw()
+    this.flowGravityWithDraw();
   }
 
   changeControlBlock(controlBlockType) {
@@ -247,7 +269,7 @@ class GameScreen {
     while (this.isSpaceDownRunning) {
       this.flowGravity();
     }
-    this.drawBlocks()
+    this.drawBlocks();
   }
 
   onEventShift() {
@@ -295,4 +317,4 @@ class GameScreen {
   }
 }
 
-export { GameScreen }
+export { GameScreen };

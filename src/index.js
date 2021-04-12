@@ -1,3 +1,3 @@
 import "./utils/util";
-import "./components/control"
-import "./components/system"
+import "./components/control";
+import "./components/system";

@@ -1,3 +1,0 @@
-require("./utils/util");
-require("./components/control");
-require("./components/system");

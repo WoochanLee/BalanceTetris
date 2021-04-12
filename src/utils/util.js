@@ -39,4 +39,4 @@ class Queue {
   }
 }
 
-export { logBlockArray, shuffleArray, Queue }
+export { logBlockArray, shuffleArray, Queue };

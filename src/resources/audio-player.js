@@ -1,4 +1,4 @@
-import "./sounds"
+import "./sounds";
 
 class AudioPlayer {
   constructor() {}
@@ -16,4 +16,4 @@ class AudioPlayer {
   }
 }
 
-export default AudioPlayer
+export default AudioPlayer;

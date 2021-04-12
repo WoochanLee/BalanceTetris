@@ -15,4 +15,17 @@ const blockShadowOpacity2 = "55";
 const topMargin = -20;
 const leftMargin = 120;
 
-export { borderWidth, blockSize, widthBlockCount, widthBlockPaddingCount, heightBlockCount, hideTopLine, shadowWidth, outBorderBlockCount, blockShadowOpacity, blockShadowOpacity2, topMargin, leftMargin}
+export {
+  borderWidth,
+  blockSize,
+  widthBlockCount,
+  widthBlockPaddingCount,
+  heightBlockCount,
+  hideTopLine,
+  shadowWidth,
+  outBorderBlockCount,
+  blockShadowOpacity,
+  blockShadowOpacity2,
+  topMargin,
+  leftMargin,
+};
