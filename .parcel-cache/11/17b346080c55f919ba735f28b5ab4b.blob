@@ -1,0 +1,45 @@
+var _game = require("./game");
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+var _gameDefault = _parcelHelpers.interopDefault(_game);
+var _system = require("./system");
+window.onkeydown = e => {
+  handleKeyboardEvent(e);
+};
+function handleKeyboardEvent(e) {
+  if (_system.isGameOver) {
+    return;
+  }
+  switch (e.code) {
+    case "ArrowLeft":
+      _gameDefault.default.onEventLeftArrow();
+      break;
+    case "ArrowRight":
+      _gameDefault.default.onEventRightArrow();
+      break;
+    case "ArrowDown":
+      _gameDefault.default.onEventDownArrow();
+      break;
+    case "ArrowUp":
+      _gameDefault.default.onEventUpArrow();
+      break;
+    case "Space":
+      _gameDefault.default.onEventSpace();
+      break;
+    case "ShiftLeft":
+      _gameDefault.default.onEventShift();
+      break;
+    case "KeyQ":
+      _gameDefault.default.onEventKeyQ();
+      break;
+    case "KeyE":
+      _gameDefault.default.onEventKeyE();
+      break;
+    case "KeyZ":
+      _gameDefault.default.onEventKeyZ();
+      break;
+    case "KeyC":
+      _gameDefault.default.onEventKeyC();
+      break;
+  }
+  _gameDefault.default.drawBlocks();
+}

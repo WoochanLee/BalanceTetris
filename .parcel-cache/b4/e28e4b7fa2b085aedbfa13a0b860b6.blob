@@ -1,0 +1,42 @@
+var _parcelHelpers = require("@parcel/transformer-js/lib/esmodule-helpers.js");
+_parcelHelpers.defineInteropFlag(exports);
+_parcelHelpers.export(exports, "borderWidth", function () {
+  return borderWidth;
+});
+_parcelHelpers.export(exports, "blockSize", function () {
+  return blockSize;
+});
+_parcelHelpers.export(exports, "widthBlockCount", function () {
+  return widthBlockCount;
+});
+_parcelHelpers.export(exports, "widthBlockPaddingCount", function () {
+  return widthBlockPaddingCount;
+});
+_parcelHelpers.export(exports, "heightBlockCount", function () {
+  return heightBlockCount;
+});
+_parcelHelpers.export(exports, "hideTopLine", function () {
+  return hideTopLine;
+});
+_parcelHelpers.export(exports, "shadowWidth", function () {
+  return shadowWidth;
+});
+_parcelHelpers.export(exports, "outBorderBlockCount", function () {
+  return outBorderBlockCount;
+});
+_parcelHelpers.export(exports, "blockShadowOpacity", function () {
+  return blockShadowOpacity;
+});
+_parcelHelpers.export(exports, "blockShadowOpacity2", function () {
+  return blockShadowOpacity2;
+});
+const borderWidth = 0;
+const blockSize = 25;
+const widthBlockCount = 10;
+const widthBlockPaddingCount = 3;
+const heightBlockCount = 25;
+const hideTopLine = 1;
+const shadowWidth = 3;
+const outBorderBlockCount = 3;
+const blockShadowOpacity = "cc";
+const blockShadowOpacity2 = "55";

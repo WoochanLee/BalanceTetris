@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Balance Tetris">
+    <meta property="og:description" content="Tetris built with vanilla javascript">
+    <meta property="og:image" content="ce46c60252df1230dbbea43a5fe6a730">
+    <meta name="description" content="Tetris built with vanilla javascript">
+    <meta name="keywords" content="Tetris,balancehero,balancetetris,테트리스,밸런스히어로,밸런스테트리스">
+    <link rel="shortcut icon" type="image/x-icon" href="0e7ecb9cce9178a84a09d74b369053cb">
+    <link rel="stylesheet" href="9a263afc07be7eb2cc7f544e6a4193a3">
+    <title>Balance Tetris</title>
+    <style data-parcel-key="0477de9fe964c2c5fef6cedb7fe7adca">
+      
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <!-- <button id="test" onclick="onClickTestButton();">스탑</button> -->
+      <!-- <canvas id="canvas" width="295" height="745"></canvas> -->
+      <!-- <h1>BALANCE TETRIS</h1> -->
+      <img class="logo__title" src="5a7d769cbc7e8dce231abde763e83d98">
+      <div class="board">
+        <div class="board__logo">
+          <img class="board__logo__speed" src="9fa42ce9e84c042faf01b52f07a7dfed">
+          <h2 id="level">0
+        </h2></div>
+        <div class="board__logo">
+          <img class="board__logo__score" src="1364727a4d39e121d9ae70310b9921cc">
+          <h2 id="score">0
+        </h2></div>
+      </div>
+      <h5 id="game-over">GAME OVER</h5>
+      <div class="screen">
+        <img id="youngImg" src="3f9d7d67540e4ff29c56770f3b93e030">
+        <div id="stage">
+            <canvas id="canvas" width="500" height="680"></canvas>
+            <canvas id="background" width="500" height="680"></canvas>
+        </div>
+        <img id="chanImg" src="671e70f9ce2d90c595c4379412526520">
+      </div>
+    </div>
+    <audio id="sound-drop" style="0458b3533a245a6bfe67bcbe09fac333">
+      <source src="86a3c0a4c9be65972dcf5d37023828f6" type="audio/mp3">
+    </audio>
+    <audio id="sound-shift" style="4a2cfd70ed285897049616c71369d319">
+      <source src="fae8c04280628a45b9c7e8891bd8a9e8" type="audio/mp3">
+    </audio>
+    <audio id="sound-clear_line" style="254bdf39666d2e58bd70cc1e123500c4">
+      <source src="6f9978a61db80cfd27d8c32741701ab3" type="audio/mp3">
+    </audio>
+    <audio id="sound-game_over" style="8237852040b2cee919ab1bd3becfa722">
+      <source src="0353a39e91100ed4551ff93e115c90bf" type="audio/mp3">
+    </audio>
+    <script type="text/javascript" src="7d02a2096947585d8de4ed697a690c49"></script>
+  </body>
+</html>
