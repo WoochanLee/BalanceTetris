@@ -24,7 +24,7 @@ import {
   widthBlockCount,
   heightBlockCount,
   outBorderBlockCount,
-} from "../../utils/const";
+} from "../../utils/constants";
 import {
   allowableRotationRange,
   collisionDelayCount,

@@ -27,7 +27,7 @@ import {
   blockShadowOpacity2,
   topMargin,
   leftMargin,
-} from "../utils/const";
+} from "../utils/constants";
 
 function initBlockArray(blockArray) {
   for (let x = 0; x < widthBlockCount + outBorderBlockCount * 2; x++) {

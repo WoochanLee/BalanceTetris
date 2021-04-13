@@ -2,7 +2,7 @@ import { blockShadowOpacity,
 shiftBackgroundColor,
 shiftBlockLocationX,
 shiftBlockLocationY,
-shiftBlockRadius } from "../../utils/const";
+shiftBlockRadius } from "../../utils/constants";
 
 
 class ShiftBlock {
