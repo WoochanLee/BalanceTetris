@@ -1,4 +1,3 @@
-// import { initBlockArray } from "../../renderer/renderer"
 import {
   BlockTypeFive,
   BlockTypeFour,
@@ -10,24 +9,13 @@ import {
 } from "./block-blueprints";
 import { shuffleArray, Queue } from "../../utils/util";
 import {
-  borderWidth,
-  blockSize,
   widthBlockCount,
   widthBlockPaddingCount,
   heightBlockCount,
-  hideTopLine,
-  shadowWidth,
   outBorderBlockCount,
-  blockShadowOpacity,
-  blockShadowOpacity2,
-  topMargin,
-  leftMargin,
-} from "../../utils/const";
+} from "../../utils/constants";
 import {
-  timePerLine,
-  increaseSpeedPerDifficulty,
-  allowableRotationRange,
-  collisionDelayCount,
+  allowableRotationRange
 } from "../../settings/config";
 
 function findBlockRefPoint(blockArray) {
