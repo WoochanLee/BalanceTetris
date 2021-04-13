@@ -1,28 +1,12 @@
 import { Renderer } from "../../renderer/renderer";
 import {
   ControlBlock,
-  ControlBlockType,
   StakedBlock,
-  clearBlockArray,
   copySingleBlock,
-  copySingleBlockWithPrev,
   copyBlockArray,
   couldBlockMoveToLeft,
   couldBlockMoveToRight,
   couldBlockMoveToBottom,
-  findBlockRefPoint,
-  getNextRotateDirection,
-  getPrevRotateDirection,
-  getRotatedBlock,
-  initBlockArray,
-  isBlockReachedToBottomBorder,
-  isBlockReachedToLeftBorder,
-  isBlockReachedToRightBorder,
-  isBottomSideCollided,
-  isInBorder,
-  isLeftSideCollided,
-  isOverlaped,
-  isRightSideCollided,
   moveToLeftOneLine,
   moveToRightOneLine,
   moveToBottomOneLine,
@@ -34,9 +18,7 @@ import {
   addScore,
   gameOver,
   levelUp,
-  makeFailEasterEgg,
   rewindTimer,
-  isGameOver,
 } from "../system";
 import {
   widthBlockCount,
@@ -44,8 +26,6 @@ import {
   outBorderBlockCount,
 } from "../../utils/const";
 import {
-  timePerLine,
-  increaseSpeedPerDifficulty,
   allowableRotationRange,
   collisionDelayCount,
 } from "../../settings/config";
@@ -197,7 +177,6 @@ class GameScreen {
 
     this.shiftBlock.isAlreadyShiftedThisTime = true;
     this.audioPlayer.play(shiftSound);
-
     if (this.shiftBlock.isShiftedBlockEmpty()) {
       this.shiftBlock.setShiftBlock(this.controlBlock.controlBlockType);
       this.controlBlock.addNewControlBlock();

@@ -15,6 +15,15 @@ const blockShadowOpacity2 = "55";
 const topMargin = -20;
 const leftMargin = 120;
 
+
+/**
+ * shift block setting
+ */
+const shiftBackgroundColor = "#444444";
+const shiftBlockLocationX = 50;
+const shiftBlockLocationY = 70;
+
+const shiftBlockRadius = 45;
 export {
   borderWidth,
   blockSize,
@@ -28,4 +37,8 @@ export {
   blockShadowOpacity2,
   topMargin,
   leftMargin,
+  shiftBackgroundColor,
+  shiftBlockLocationX,
+  shiftBlockLocationY,
+  shiftBlockRadius
 };

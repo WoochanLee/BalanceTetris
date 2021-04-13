@@ -6,6 +6,8 @@ window.onkeydown = (e) => {
 };
 
 function handleKeyboardEvent(e) {
+  e.preventDefault();
+  
   if (isGameOver) {
     return;
   }

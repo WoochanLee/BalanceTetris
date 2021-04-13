@@ -1,12 +1,9 @@
-const shiftBackgroundColor = "#444444";
+import { blockShadowOpacity,
+shiftBackgroundColor,
+shiftBlockLocationX,
+shiftBlockLocationY,
+shiftBlockRadius } from "../../utils/const";
 
-/**
- * shift block setting
- */
-const shiftBlockLocationX = 50;
-const shiftBlockLocationY = 70;
-
-const shiftBlockRadius = 45;
 
 class ShiftBlock {
   constructor() {

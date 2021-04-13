@@ -1,6 +1,10 @@
 const previewBackgroundColor = "#444444";
 
-import { blockShadowOpacity } from "../../utils/const";
+
+import {
+  blockShadowOpacity,
+  shiftBackgroundColor,
+} from "../../utils/const";
 
 /**
  * preview block setting
